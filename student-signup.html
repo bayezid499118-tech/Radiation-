@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Sign Up - Radiation</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -37,7 +39,7 @@
       margin-bottom: 8px;
     }
 
-    .signup-box .subtitle {
+    .subtitle {
       text-align: center;
       color: #666;
       margin-bottom: 25px;
@@ -76,8 +78,10 @@
       cursor: pointer;
     }
 
-    .signup-btn:hover {
-      background: #1b5e20;
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
     }
 
     .login-link {
@@ -89,12 +93,6 @@
       color: #1565c0;
       text-decoration: none;
       font-weight: bold;
-    }
-
-    #message {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
     }
   </style>
 </head>
@@ -154,7 +152,17 @@
   </div>
 
   <script>
-    document.getElementById("signupForm").addEventListener("submit", function(event) {
+
+    const SUPABASE_URL = "https://yzgydftfucahiorefgoc.supabase.co/rest/v1/YOUR_SUPABASE_URL_HERE";
+    const SUPABASE_KEY = "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCSYOUR_PUBLISHABLE_KEY_HERE";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    document.getElementById("signupForm").addEventListener("submit", async function(event) {
+
       event.preventDefault();
 
       const phone = document.getElementById("phone").value.trim();
@@ -168,12 +176,39 @@
         return;
       }
 
-      message.style.color = "#1565c0";
-      message.textContent = "Sign-up system will be connected to Supabase next.";
+      if (phone.length < 11) {
+        message.style.color = "red";
+        message.textContent = "Please enter a valid mobile number.";
+        return;
+      }
 
-      console.log("Phone:", phone);
+      message.style.color = "#1565c0";
+      message.textContent = "Creating account...";
+
+      /*
+        Supabase phone authentication requires phone auth
+        to be enabled in your Supabase project.
+      */
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        phone: phone,
+        password: password
+      });
+
+      if (error) {
+        message.style.color = "red";
+        message.textContent = error.message;
+        return;
+      }
+
+      message.style.color = "green";
+      message.textContent = "Student account created successfully!";
+
+      console.log(data);
+
     });
+
   </script>
 
 </body>
-  </html>
+</html>
