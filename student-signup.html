@@ -109,12 +109,12 @@
 
     <form id="signupForm">
 
-      <label for="phone">Mobile Number</label>
+      <label for="email">Email Address</label>
 
       <input
-        type="tel"
-        id="phone"
-        placeholder="01XXXXXXXXX"
+        type="email"
+        id="email"
+        placeholder="Enter your email"
         required
       >
 
@@ -153,8 +153,8 @@
 
   <script>
 
-    const SUPABASE_URL = "https://yzgydftfucahiorefgoc.supabase.co/rest/v1/YOUR_SUPABASE_URL_HERE";
-    const SUPABASE_KEY = "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCSYOUR_PUBLISHABLE_KEY_HERE";
+    const SUPABASE_URL = "https://yzgydftfucahiorefgoc.supabase.co/rest/v1/";
+    const SUPABASE_KEY = "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
 
     const supabaseClient = supabase.createClient(
       SUPABASE_URL,
@@ -165,7 +165,7 @@
 
       event.preventDefault();
 
-      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirmPassword").value;
       const message = document.getElementById("message");
@@ -176,22 +176,11 @@
         return;
       }
 
-      if (phone.length < 11) {
-        message.style.color = "red";
-        message.textContent = "Please enter a valid mobile number.";
-        return;
-      }
-
       message.style.color = "#1565c0";
       message.textContent = "Creating account...";
 
-      /*
-        Supabase phone authentication requires phone auth
-        to be enabled in your Supabase project.
-      */
-
       const { data, error } = await supabaseClient.auth.signUp({
-        phone: phone,
+        email: email,
         password: password
       });
 
@@ -211,4 +200,4 @@
   </script>
 
 </body>
-</html>
+    </html>
