@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Student Dashboard - Radiation</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1565c0, #42a5f5);
+      color: white;
+      padding: 25px 20px;
+    }
+
+    header h1 {
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 20px;
+    }
+
+    .welcome {
+      background: white;
+      padding: 22px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .welcome h2 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .subjects-title {
+      margin-bottom: 15px;
+      color: #1565c0;
+    }
+
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+    }
+
+    .subject-card {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .subject-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .subject-card h3 {
+      color: #1565c0;
+      margin-bottom: 8px;
+    }
+
+    .subject-card p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .actions {
+      margin-top: 30px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .profile-btn {
+      background: #1565c0;
+      color: white;
+    }
+
+    .logout-btn {
+      background: #c62828;
+      color: white;
+    }
+
+    #message {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Radiation Student Dashboard</h1>
+    <p id="studentInfo">Loading student information...</p>
+  </header>
+
+  <div class="container">
+
+    <div class="welcome">
+      <h2 id="welcomeText">Welcome!</h2>
+      <p id="classText">Loading class information...</p>
+    </div>
+
+    <h2 class="subjects-title">Class 8 Subjects</h2>
+
+    <div class="subjects">
+
+      <div class="subject-card" onclick="openSubject('Bangla')">
+        <h3>Bangla</h3>
+        <p>Notes, lessons and resources</p>
+      </div>
+
+      <div class="subject-card" onclick="openSubject('English')">
+        <h3>English</h3>
+        <p>Notes, lessons and resources</p>
+      </div>
+
+      <div class="subject-card" onclick="openSubject('Mathematics')">
+        <h3>Mathematics</h3>
+        <p>Notes, lessons and resources</p>
+      </div>
+
+      <div class="subject-card" onclick="openSubject('Science')">
+        <h3>Science</h3>
+        <p>Notes, lessons and resources</p>
+      </div>
+
+      <div class="subject-card" onclick="openSubject('BGS')">
+        <h3>BGS</h3>
+        <p>Notes, lessons and resources</p>
+      </div>
+
+      <div class="subject-card" onclick="openSubject('ICT')">
+        <h3>ICT</h3>
+        <p>Notes, lessons and resources</p>
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button class="profile-btn" onclick="showProfile()">
+        My Profile
+      </button>
+
+      <button class="logout-btn" onclick="logout()">
+        Logout
+      </button>
+    </div>
+
+    <p id="message"></p>
+
+  </div>
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://yzgydftfucahiorefgoc.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    async function loadStudent() {
+
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
+
+      if (error || !user) {
+
+        window.location.href =
+          "student-login.html";
+
+        return;
+      }
+
+      const name =
+        user.user_metadata?.full_name ||
+        "Student";
+
+      const studentClass =
+        user.user_metadata?.student_class ||
+        "";
+
+      document.getElementById("welcomeText")
+        .textContent =
+        "Welcome, " + name + "!";
+
+      document.getElementById("studentInfo")
+        .textContent =
+        user.email;
+
+      document.getElementById("classText")
+        .textContent =
+        "You are enrolled in Class " +
+        studentClass;
+
+    }
+
+
+    function openSubject(subject) {
+
+      document.getElementById("message")
+        .textContent =
+        subject +
+        " section will be added next.";
+
+    }
+
+
+    function showProfile() {
+
+      document.getElementById("message")
+        .textContent =
+        "Your profile section will be added next.";
+
+    }
+
+
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "student-login.html";
+
+    }
+
+
+    loadStudent();
+
+  </script>
+
+</body>
+  </html>
