@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Student Sign Up - Radiation</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -26,7 +27,7 @@
 
     .signup-box {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       background: white;
       padding: 30px 25px;
       border-radius: 18px;
@@ -52,7 +53,8 @@
       color: #333;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       padding: 13px;
       border: 1px solid #ccc;
@@ -60,10 +62,16 @@
       margin-bottom: 18px;
       font-size: 16px;
       outline: none;
+      background: white;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       border-color: #1565c0;
+    }
+
+    .group-box {
+      display: none;
     }
 
     .signup-btn {
@@ -78,10 +86,20 @@
       cursor: pointer;
     }
 
+    .signup-btn:hover {
+      background: #1b5e20;
+    }
+
+    .signup-btn:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
     #message {
       text-align: center;
       margin-top: 15px;
       font-size: 14px;
+      line-height: 1.5;
     }
 
     .login-link {
@@ -109,6 +127,18 @@
 
     <form id="signupForm">
 
+      <!-- NAME -->
+      <label for="name">Student Name</label>
+
+      <input
+        type="text"
+        id="name"
+        placeholder="Enter your name"
+        required
+      >
+
+
+      <!-- EMAIL -->
       <label for="email">Email Address</label>
 
       <input
@@ -118,6 +148,58 @@
         required
       >
 
+
+      <!-- CLASS -->
+      <label for="studentClass">Select Class</label>
+
+      <select id="studentClass" required>
+
+        <option value="">
+          -- Select Class --
+        </option>
+
+        <option value="8">Class 8</option>
+
+        <option value="9">Class 9</option>
+
+        <option value="10">Class 10</option>
+
+        <option value="11">Class 11</option>
+
+        <option value="12">Class 12</option>
+
+      </select>
+
+
+      <!-- GROUP -->
+      <div class="group-box" id="groupBox">
+
+        <label for="group">Select Group</label>
+
+        <select id="group">
+
+          <option value="">
+            -- Select Group --
+          </option>
+
+          <option value="Science">
+            Science
+          </option>
+
+          <option value="Arts">
+            Arts
+          </option>
+
+          <option value="Commerce">
+            Commerce
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- PASSWORD -->
       <label for="password">Password</label>
 
       <input
@@ -127,6 +209,8 @@
         required
       >
 
+
+      <!-- CONFIRM PASSWORD -->
       <label for="confirmPassword">Confirm Password</label>
 
       <input
@@ -136,68 +220,307 @@
         required
       >
 
-      <button type="submit" class="signup-btn">
+
+      <button
+        type="submit"
+        class="signup-btn"
+        id="signupBtn"
+      >
         Create Student Account
       </button>
 
     </form>
 
+
     <p id="message"></p>
 
+
     <div class="login-link">
+
       Already have an account?
-      <a href="student-login.html">Student Login</a>
+
+      <a href="student-login.html">
+        Student Login
+      </a>
+
     </div>
 
   </div>
 
+
   <script>
 
-    const SUPABASE_URL = "https://yzgydftfucahiorefgoc.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+    // ================================
+    // SUPABASE
+    // ================================
 
-    const supabaseClient = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+    const SUPABASE_URL =
+      "https://yzgydftfucahiorefgoc.supabase.co";
 
-    document.getElementById("signupForm").addEventListener("submit", async function(event) {
+    const SUPABASE_KEY =
+      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
 
-      event.preventDefault();
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-      const message = document.getElementById("message");
 
-      if (password !== confirmPassword) {
-        message.style.color = "red";
-        message.textContent = "Passwords do not match.";
-        return;
+    // ================================
+    // ELEMENTS
+    // ================================
+
+    const studentClass =
+      document.getElementById("studentClass");
+
+    const groupBox =
+      document.getElementById("groupBox");
+
+    const group =
+      document.getElementById("group");
+
+    const form =
+      document.getElementById("signupForm");
+
+    const message =
+      document.getElementById("message");
+
+    const signupBtn =
+      document.getElementById("signupBtn");
+
+
+    // ================================
+    // CLASS CHANGE
+    // ================================
+
+    studentClass.addEventListener("change", function () {
+
+      const selectedClass =
+        studentClass.value;
+
+
+      // Class 8 has no group
+      if (selectedClass === "8") {
+
+        groupBox.style.display = "none";
+
+        group.value = "";
+
+        group.removeAttribute("required");
+
       }
 
-      message.style.color = "#1565c0";
-      message.textContent = "Creating account...";
+      // Class 9-12 needs group
+      else if (
+        selectedClass === "9" ||
+        selectedClass === "10" ||
+        selectedClass === "11" ||
+        selectedClass === "12"
+      ) {
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password
-      });
+        groupBox.style.display = "block";
 
-      if (error) {
-        message.style.color = "red";
-        message.textContent = error.message;
-        return;
+        group.setAttribute("required", "required");
+
       }
 
-      message.style.color = "green";
-      message.textContent = "Student account created successfully!";
+      else {
 
-      console.log(data);
+        groupBox.style.display = "none";
+
+        group.value = "";
+
+        group.removeAttribute("required");
+
+      }
 
     });
+
+
+    // ================================
+    // SIGN UP
+    // ================================
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+
+        const name =
+          document.getElementById("name")
+          .value
+          .trim();
+
+        const email =
+          document.getElementById("email")
+          .value
+          .trim();
+
+        const password =
+          document.getElementById("password")
+          .value;
+
+        const confirmPassword =
+          document.getElementById("confirmPassword")
+          .value;
+
+        const selectedClass =
+          studentClass.value;
+
+        const selectedGroup =
+          group.value;
+
+
+        // ================================
+        // PASSWORD CHECK
+        // ================================
+
+        if (password !== confirmPassword) {
+
+          message.style.color = "red";
+
+          message.textContent =
+            "Passwords do not match.";
+
+          return;
+        }
+
+
+        // ================================
+        // CLASS CHECK
+        // ================================
+
+        if (!selectedClass) {
+
+          message.style.color = "red";
+
+          message.textContent =
+            "Please select your class.";
+
+          return;
+        }
+
+
+        // ================================
+        // GROUP CHECK
+        // ================================
+
+        if (
+          selectedClass !== "8" &&
+          !selectedGroup
+        ) {
+
+          message.style.color = "red";
+
+          message.textContent =
+            "Please select your group.";
+
+          return;
+        }
+
+
+        // ================================
+        // LOADING
+        // ================================
+
+        signupBtn.disabled = true;
+
+        signupBtn.textContent =
+          "Creating Account...";
+
+        message.style.color = "#1565c0";
+
+        message.textContent =
+          "Please wait...";
+
+
+        // ================================
+        // SUPABASE SIGN UP
+        // ================================
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+
+              data: {
+
+                full_name: name,
+
+                student_class: selectedClass,
+
+                student_group:
+                  selectedClass === "8"
+                    ? null
+                    : selectedGroup,
+
+                role: "student"
+
+              }
+
+            }
+
+          });
+
+
+        // ================================
+        // ERROR
+        // ================================
+
+        if (error) {
+
+          signupBtn.disabled = false;
+
+          signupBtn.textContent =
+            "Create Student Account";
+
+          message.style.color = "red";
+
+          message.textContent =
+            error.message;
+
+          return;
+        }
+
+
+        // ================================
+        // SUCCESS
+        // ================================
+
+        message.style.color = "green";
+
+        message.textContent =
+          "Student account created successfully!";
+
+
+        console.log(
+          "Student Data:",
+          data
+        );
+
+
+        // ================================
+        // GO TO DASHBOARD
+        // ================================
+
+        setTimeout(function () {
+
+          window.location.href =
+            "student-dashboard.html";
+
+        }, 1000);
+
+      }
+    );
 
   </script>
 
 </body>
-    </html>
+        </html>
