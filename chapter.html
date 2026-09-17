@@ -179,7 +179,7 @@
       <div class="option" onclick="openChat()">
         <div class="icon">💬</div>
         <h3>Live Class Chat</h3>
-        <p>শিক্ষক ও শিক্ষার্থীদের সাথে যোগাযোগ</p>
+        <p>লাইভ ক্লাসের Chat</p>
       </div>
 
     </div>
@@ -192,8 +192,11 @@
     // URL থেকে Subject ও Chapter নেওয়া
     const urlParams = new URLSearchParams(window.location.search);
 
-    const subject = urlParams.get("subject") || "Mathematics";
-    const chapter = urlParams.get("chapter") || "1";
+    const subject =
+      urlParams.get("subject") || "Mathematics";
+
+    const chapter =
+      urlParams.get("chapter") || "1";
 
 
     // Mathematics-এর অধ্যায়ের নাম
@@ -214,18 +217,26 @@
     };
 
 
-    // অধ্যায়ের নাম দেখানো
+    // অধ্যায়ের নাম
     let chapterName = "অধ্যায় " + chapter;
 
-    if (subject === "Mathematics" && mathematicsChapters[chapter]) {
+    if (
+      subject === "Mathematics" &&
+      mathematicsChapters[chapter]
+    ) {
       chapterName = mathematicsChapters[chapter];
     }
 
 
-    document.getElementById("subjectName").innerText = subject;
+    // Subject দেখানো
+    document.getElementById("subjectName").innerText =
+      subject;
 
+
+    // Chapter দেখানো
     document.getElementById("chapterTitle").innerText =
-      "অধ্যায় " + chapter + " — " + chapterName;
+      "অধ্যায় " + chapter +
+      " — " + chapterName;
 
 
     // Back Button
@@ -233,33 +244,85 @@
       "mathematics.html";
 
 
-    // নিচের ফাংশনগুলো পরের ধাপে আসল সিস্টেমের সাথে যুক্ত হবে
+    // =========================
+    // LIVE CLASS
+    // =========================
 
     function openLiveClass() {
-      alert("Live Class সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+
+      window.location.href =
+        "live-class.html?subject=" +
+        encodeURIComponent(subject) +
+        "&chapter=" +
+        encodeURIComponent(chapter);
+
     }
+
+
+    // =========================
+    // RECORDED CLASS
+    // =========================
 
     function openRecordedClass() {
-      alert("Recorded Class সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+
+      alert(
+        "Recorded Class সিস্টেম পরের ধাপে যুক্ত করা হবে।"
+      );
+
     }
+
+
+    // =========================
+    // CLASS SLIDES
+    // =========================
 
     function openSlides() {
-      alert("Class Slides (PDF) সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+
+      alert(
+        "Class Slides (PDF) সিস্টেম পরের ধাপে যুক্ত করা হবে।"
+      );
+
     }
+
+
+    // =========================
+    // ONLINE EXAM
+    // =========================
 
     function openExam() {
-      alert("Online Exam সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+
+      alert(
+        "Online Exam সিস্টেম পরের ধাপে যুক্ত করা হবে।"
+      );
+
     }
+
+
+    // =========================
+    // STUDENT PROGRESS
+    // =========================
 
     function openProgress() {
-      alert("Student Progress সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+
+      alert(
+        "Student Progress সিস্টেম পরের ধাপে যুক্ত করা হবে।"
+      );
+
     }
 
+
+    // =========================
+    // LIVE CHAT
+    // =========================
+
     function openChat() {
-      alert("Live Class Chat সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+
+      // Chat আসলে Live Class-এর মধ্যেই থাকবে
+      openLiveClass();
+
     }
 
   </script>
 
 </body>
-  </html>
+</html>
