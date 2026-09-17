@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Student Dashboard - Radiation</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -53,7 +52,12 @@
 
     .welcome h2 {
       color: #1565c0;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .welcome p {
+      margin-top: 6px;
+      color: #555;
     }
 
     .subjects-title {
@@ -74,10 +78,12 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
       text-align: center;
       cursor: pointer;
+      transition: 0.2s;
     }
 
     .subject-card:hover {
       transform: translateY(-3px);
+      box-shadow: 0 7px 20px rgba(0,0,0,0.12);
     }
 
     .subject-card h3 {
@@ -103,6 +109,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      font-size: 15px;
     }
 
     .profile-btn {
@@ -132,59 +139,108 @@
   <div class="container">
 
     <div class="welcome">
-      <h2 id="welcomeText">Welcome!</h2>
-      <p id="classText">Loading class information...</p>
+
+      <h2 id="welcomeText">
+        Welcome!
+      </h2>
+
+      <p id="classText">
+        Loading class information...
+      </p>
+
+      <p id="groupText">
+        Loading group information...
+      </p>
+
     </div>
 
-    <h2 class="subjects-title">Class 8 Subjects</h2>
+
+    <h2 class="subjects-title">
+      Class 8 Subjects
+    </h2>
+
 
     <div class="subjects">
 
-      <div class="subject-card" onclick="openSubject('Bangla')">
+      <div
+        class="subject-card"
+        onclick="openSubject('Bangla')"
+      >
         <h3>Bangla</h3>
         <p>Notes, lessons and resources</p>
       </div>
 
-      <div class="subject-card" onclick="openSubject('English')">
+
+      <div
+        class="subject-card"
+        onclick="openSubject('English')"
+      >
         <h3>English</h3>
         <p>Notes, lessons and resources</p>
       </div>
 
-      <div class="subject-card" onclick="openSubject('Mathematics')">
+
+      <div
+        class="subject-card"
+        onclick="openSubject('Mathematics')"
+      >
         <h3>Mathematics</h3>
         <p>Notes, lessons and resources</p>
       </div>
 
-      <div class="subject-card" onclick="openSubject('Science')">
+
+      <div
+        class="subject-card"
+        onclick="openSubject('Science')"
+      >
         <h3>Science</h3>
         <p>Notes, lessons and resources</p>
       </div>
 
-      <div class="subject-card" onclick="openSubject('BGS')">
+
+      <div
+        class="subject-card"
+        onclick="openSubject('BGS')"
+      >
         <h3>BGS</h3>
         <p>Notes, lessons and resources</p>
       </div>
 
-      <div class="subject-card" onclick="openSubject('ICT')">
+
+      <div
+        class="subject-card"
+        onclick="openSubject('ICT')"
+      >
         <h3>ICT</h3>
         <p>Notes, lessons and resources</p>
       </div>
 
     </div>
 
+
     <div class="actions">
-      <button class="profile-btn" onclick="showProfile()">
+
+      <button
+        class="profile-btn"
+        onclick="showProfile()"
+      >
         My Profile
       </button>
 
-      <button class="logout-btn" onclick="logout()">
+      <button
+        class="logout-btn"
+        onclick="logout()"
+      >
         Logout
       </button>
+
     </div>
+
 
     <p id="message"></p>
 
   </div>
+
 
   <script>
 
@@ -193,6 +249,7 @@
 
     const SUPABASE_KEY =
       "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
 
     const supabaseClient =
       supabase.createClient(
@@ -206,7 +263,9 @@
       const {
         data: { user },
         error
-      } = await supabaseClient.auth.getUser();
+      } =
+        await supabaseClient.auth.getUser();
+
 
       if (error || !user) {
 
@@ -216,45 +275,85 @@
         return;
       }
 
+
       const name =
         user.user_metadata?.full_name ||
         "Student";
+
 
       const studentClass =
         user.user_metadata?.student_class ||
         "";
 
-      document.getElementById("welcomeText")
-        .textContent =
+
+      const studentGroup =
+        user.user_metadata?.student_group ||
+        "";
+
+
+      document.getElementById(
+        "welcomeText"
+      ).textContent =
         "Welcome, " + name + "!";
 
-      document.getElementById("studentInfo")
-        .textContent =
-        user.email;
 
-      document.getElementById("classText")
-        .textContent =
-        "You are enrolled in Class " +
-        studentClass;
+      document.getElementById(
+        "studentInfo"
+      ).textContent =
+        "Email: " + (user.email || "");
+
+
+      document.getElementById(
+        "classText"
+      ).textContent =
+        "Class: " + studentClass;
+
+
+      if (studentGroup) {
+
+        document.getElementById(
+          "groupText"
+        ).textContent =
+          "Group: " + studentGroup;
+
+      } else {
+
+        document.getElementById(
+          "groupText"
+        ).textContent =
+          "Group: Not applicable";
+
+      }
 
     }
 
 
     function openSubject(subject) {
 
-      document.getElementById("message")
-        .textContent =
+      if (subject === "Mathematics") {
+
+        window.location.href =
+          "mathematics.html";
+
+        return;
+      }
+
+
+      document.getElementById(
+        "message"
+      ).textContent =
         subject +
-        " section will be added next.";
+        " page will be added next.";
 
     }
 
 
     function showProfile() {
 
-      document.getElementById("message")
-        .textContent =
-        "Your profile section will be added next.";
+      document.getElementById(
+        "message"
+      ).textContent =
+        "Profile page will be added next.";
 
     }
 
@@ -274,4 +373,4 @@
   </script>
 
 </body>
-  </html>
+</html>
