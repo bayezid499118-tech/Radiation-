@@ -6,6 +6,9 @@
 
   <title>Live Class - Radiation</title>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -74,7 +77,6 @@
       font-weight: bold;
     }
 
-    /* Live Video */
     .video-box {
       background: #000;
       width: 100%;
@@ -108,7 +110,6 @@
       font-size: 14px;
     }
 
-    /* Chat */
     .chat-box {
       background: white;
       border-radius: 12px;
@@ -148,6 +149,22 @@
     .message-text {
       font-size: 14px;
       color: #444;
+      word-break: break-word;
+    }
+
+    .reply {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #eef4ff;
+      border-left: 3px solid #2563eb;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+
+    .reply-name {
+      font-weight: bold;
+      color: #2563eb;
+      margin-bottom: 3px;
     }
 
     .empty-message {
@@ -187,6 +204,11 @@
       background: #1d4ed8;
     }
 
+    .send-btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 600px) {
 
       .header h1 {
@@ -214,22 +236,17 @@
 
 <body>
 
-  <!-- Header -->
   <div class="header">
     <h1>Radiation</h1>
     <p id="subjectName">Mathematics</p>
   </div>
 
-
   <div class="container">
 
-    <!-- Back -->
     <a href="#" class="back-btn" id="backButton">
       ← Back to Chapter
     </a>
 
-
-    <!-- Class Information -->
     <div class="class-info">
 
       <h2 id="chapterTitle">
@@ -241,7 +258,6 @@
       </span>
 
     </div>
-
 
     <!-- Live Video -->
     <div class="video-box">
@@ -262,7 +278,6 @@
 
     </div>
 
-
     <!-- Chat -->
     <div class="chat-box">
 
@@ -270,18 +285,14 @@
         💬 Live Class Chat
       </div>
 
-
-      <!-- Messages -->
       <div class="messages" id="messages">
 
         <div class="empty-message" id="emptyMessage">
-          এখনো কোনো মন্তব্য নেই।
+          মেসেজ লোড হচ্ছে...
         </div>
 
       </div>
 
-
-      <!-- Input -->
       <div class="chat-input-area">
 
         <input
@@ -294,6 +305,7 @@
 
         <button
           class="send-btn"
+          id="sendButton"
           onclick="sendMessage()"
         >
           Send
@@ -308,7 +320,26 @@
 
   <script>
 
-    // URL থেকে Subject ও Chapter নেওয়া
+    // ==============================
+    // SUPABASE CONNECTION
+    // ==============================
+
+    const SUPABASE_URL =
+      "https://yzgydftfucahiorefgoc.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    // ==============================
+    // URL DATA
+    // ==============================
 
     const urlParams =
       new URLSearchParams(window.location.search);
@@ -320,7 +351,9 @@
       urlParams.get("chapter") || "1";
 
 
-    // Mathematics-এর অধ্যায়ের নাম
+    // ==============================
+    // MATHEMATICS CHAPTERS
+    // ==============================
 
     const mathematicsChapters = {
 
@@ -354,20 +387,18 @@
     }
 
 
-    // Subject দেখানো
-
     document.getElementById("subjectName").innerText =
       subject;
 
-
-    // Chapter দেখানো
 
     document.getElementById("chapterTitle").innerText =
       "অধ্যায় " + chapter +
       " — " + chapterName;
 
 
-    // Back Button
+    // ==============================
+    // BACK BUTTON
+    // ==============================
 
     document.getElementById("backButton").href =
       "chapter.html?subject=" +
@@ -376,12 +407,210 @@
       encodeURIComponent(chapter);
 
 
-    // Comment পাঠানো
+    // ==============================
+    // STUDENT NAME
+    // ==============================
 
-    function sendMessage() {
+    let studentName = "Student";
+
+
+    // ==============================
+    // LOAD CURRENT USER
+    // ==============================
+
+    async function loadUser() {
+
+      const {
+        data: {
+          user
+        }
+      } = await supabaseClient.auth.getUser();
+
+
+      if (!user) {
+
+        alert("অনুগ্রহ করে আগে Student Login করুন।");
+
+        window.location.href =
+          "student-login.html";
+
+        return false;
+
+      }
+
+
+      studentName =
+        user.user_metadata?.full_name ||
+        "Student";
+
+
+      return true;
+
+    }
+
+
+    // ==============================
+    // LOAD CHAT MESSAGES
+    // ==============================
+
+    async function loadMessages() {
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+
+        .from("live_chat_messages")
+
+        .select("*")
+
+        .eq("subject", subject)
+
+        .eq("chapter", parseInt(chapter))
+
+        .order("created_at", {
+          ascending: true
+        });
+
+
+      if (error) {
+
+        console.error(error);
+
+        document.getElementById("messages").innerHTML =
+          '<div class="empty-message">' +
+          'মেসেজ লোড করা যায়নি।' +
+          '</div>';
+
+        return;
+
+      }
+
+
+      displayMessages(data || []);
+
+    }
+
+
+    // ==============================
+    // DISPLAY MESSAGES
+    // ==============================
+
+    function displayMessages(data) {
+
+      const messages =
+        document.getElementById("messages");
+
+
+      messages.innerHTML = "";
+
+
+      if (data.length === 0) {
+
+        messages.innerHTML =
+          '<div class="empty-message">' +
+          'এখনো কোনো মন্তব্য নেই।' +
+          '</div>';
+
+        return;
+
+      }
+
+
+      data.forEach(function(item) {
+
+        const messageDiv =
+          document.createElement("div");
+
+        messageDiv.className =
+          "message";
+
+
+        const nameDiv =
+          document.createElement("div");
+
+        nameDiv.className =
+          "message-name";
+
+        nameDiv.textContent =
+          item.student_name;
+
+
+        const textDiv =
+          document.createElement("div");
+
+        textDiv.className =
+          "message-text";
+
+        textDiv.textContent =
+          item.message;
+
+
+        messageDiv.appendChild(nameDiv);
+
+        messageDiv.appendChild(textDiv);
+
+
+        // Teacher Reply থাকলে দেখাবে
+
+        if (item.teacher_reply) {
+
+          const replyDiv =
+            document.createElement("div");
+
+          replyDiv.className =
+            "reply";
+
+
+          const replyName =
+            document.createElement("div");
+
+          replyName.className =
+            "reply-name";
+
+          replyName.textContent =
+            "Teacher Reply";
+
+
+          const replyText =
+            document.createElement("div");
+
+          replyText.textContent =
+            item.teacher_reply;
+
+
+          replyDiv.appendChild(replyName);
+
+          replyDiv.appendChild(replyText);
+
+          messageDiv.appendChild(replyDiv);
+
+        }
+
+
+        messages.appendChild(messageDiv);
+
+      });
+
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+
+
+    // ==============================
+    // SEND MESSAGE
+    // ==============================
+
+    async function sendMessage() {
 
       const input =
         document.getElementById("chatInput");
+
+      const button =
+        document.getElementById("sendButton");
+
 
       const message =
         input.value.trim();
@@ -394,66 +623,81 @@
       }
 
 
-      const messages =
-        document.getElementById("messages");
+      button.disabled = true;
 
-      const emptyMessage =
-        document.getElementById("emptyMessage");
+      button.innerText = "Sending...";
 
 
-      if (emptyMessage) {
+      const {
+        data: {
+          user
+        }
+      } = await supabaseClient.auth.getUser();
 
-        emptyMessage.remove();
+
+      if (!user) {
+
+        alert("অনুগ্রহ করে আগে Login করুন.");
+
+        window.location.href =
+          "student-login.html";
+
+        return;
 
       }
 
 
-      const newMessage =
-        document.createElement("div");
-
-      newMessage.className =
-        "message";
+      const name =
+        user.user_metadata?.full_name ||
+        "Student";
 
 
-      newMessage.innerHTML =
+      const {
+        error
+      } = await supabaseClient
 
-        '<div class="message-name">Student</div>' +
+        .from("live_chat_messages")
 
-        '<div class="message-text">' +
+        .insert({
 
-        escapeHTML(message) +
+          subject: subject,
 
-        '</div>';
+          chapter: parseInt(chapter),
+
+          student_name: name,
+
+          message: message
+
+        });
 
 
-      messages.appendChild(newMessage);
+      if (error) {
+
+        console.error(error);
+
+        alert(
+          "মেসেজ পাঠানো যায়নি। আবার চেষ্টা করুন।"
+        );
+
+      } else {
+
+        input.value = "";
+
+        await loadMessages();
+
+      }
 
 
-      input.value = "";
+      button.disabled = false;
 
-
-      messages.scrollTop =
-        messages.scrollHeight;
+      button.innerText = "Send";
 
     }
 
 
-    // নিরাপদভাবে মন্তব্য দেখানো
-
-    function escapeHTML(text) {
-
-      const div =
-        document.createElement("div");
-
-      div.textContent =
-        text;
-
-      return div.innerHTML;
-
-    }
-
-
-    // Enter চাপলেও Comment পাঠানো যাবে
+    // ==============================
+    // ENTER KEY
+    // ==============================
 
     document
       .getElementById("chatInput")
@@ -470,7 +714,41 @@
         }
       );
 
+
+    // ==============================
+    // START
+    // ==============================
+
+    async function startPage() {
+
+      const loggedIn =
+        await loadUser();
+
+
+      if (!loggedIn) {
+
+        return;
+
+      }
+
+
+      await loadMessages();
+
+
+      // প্রতি ৫ সেকেন্ডে নতুন মেসেজ/
+      // Teacher Reply চেক করবে
+
+      setInterval(
+        loadMessages,
+        5000
+      );
+
+    }
+
+
+    startPage();
+
   </script>
 
 </body>
-  </html>
+</html>
