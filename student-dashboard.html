@@ -131,10 +131,10 @@
   </style>
 </head>
 
-
 <body>
 
   <!-- HEADER -->
+
   <header>
 
     <h1>Radiation Student Dashboard</h1>
@@ -147,10 +147,12 @@
 
 
   <!-- MAIN -->
+
   <div class="container">
 
 
     <!-- WELCOME BOX -->
+
     <div class="welcome">
 
       <h2 id="welcomeText">
@@ -169,16 +171,19 @@
 
 
     <!-- SUBJECT TITLE -->
+
     <h2 class="subjects-title">
       My Subjects
     </h2>
 
 
     <!-- SUBJECTS -->
+
     <div class="subjects">
 
 
       <!-- BANGLA -->
+
       <div
         class="subject-card"
         onclick="openSubject('Bangla')"
@@ -194,6 +199,7 @@
 
 
       <!-- ENGLISH -->
+
       <div
         class="subject-card"
         onclick="openSubject('English')"
@@ -209,6 +215,7 @@
 
 
       <!-- MATHEMATICS -->
+
       <div
         class="subject-card"
         onclick="openSubject('Mathematics')"
@@ -224,6 +231,7 @@
 
 
       <!-- SCIENCE -->
+
       <div
         class="subject-card"
         onclick="openSubject('Science')"
@@ -239,6 +247,7 @@
 
 
       <!-- BGS -->
+
       <div
         class="subject-card"
         onclick="openSubject('BGS')"
@@ -254,6 +263,7 @@
 
 
       <!-- ICT -->
+
       <div
         class="subject-card"
         onclick="openSubject('ICT')"
@@ -272,6 +282,7 @@
 
 
     <!-- ACTION BUTTONS -->
+
     <div class="actions">
 
       <button
@@ -299,6 +310,7 @@
 
 
   <!-- JAVASCRIPT -->
+
   <script>
 
     // =====================================
@@ -325,118 +337,148 @@
 
     async function loadStudent() {
 
-      const result =
-        await supabaseClient.auth.getUser();
+      try {
 
-      const user =
-        result.data.user;
+        const result =
+          await supabaseClient.auth.getUser();
+
+        const user =
+          result.data.user;
 
 
-      // যদি Login করা না থাকে
-      if (!user) {
+        // =====================================
+        // LOGIN CHECK
+        // =====================================
 
-        window.location.href =
-          "student-login.html";
+        if (!user) {
 
-        return;
+          window.location.href =
+            "student-login.html";
+
+          return;
+
+        }
+
+
+        // =====================================
+        // STUDENT NAME
+        // =====================================
+
+        const userMetadata =
+          user.user_metadata || {};
+
+
+        const name =
+          userMetadata.full_name ||
+          userMetadata.name ||
+          "Student";
+
+
+        // =====================================
+        // STUDENT CLASS
+        // =====================================
+
+        const studentClass =
+          userMetadata.student_class ||
+          "Not selected";
+
+
+        // =====================================
+        // STUDENT GROUP
+        // =====================================
+
+        const studentGroup =
+          userMetadata.student_group ||
+          "";
+
+
+        // =====================================
+        // SHOW STUDENT NAME
+        // =====================================
+
+        document.getElementById(
+          "welcomeText"
+        ).textContent =
+          "Welcome, " + name + "!";
+
+
+        // =====================================
+        // SHOW EMAIL
+        // =====================================
+
+        document.getElementById(
+          "studentInfo"
+        ).textContent =
+          "Email: " + (user.email || "");
+
+
+        // =====================================
+        // SHOW CLASS
+        // =====================================
+
+        document.getElementById(
+          "classText"
+        ).textContent =
+          "Class: " + studentClass;
+
+
+        // =====================================
+        // SHOW GROUP
+        // =====================================
+
+        if (
+          studentClass === "8" ||
+          studentClass === "Class 8"
+        ) {
+
+          document.getElementById(
+            "groupText"
+          ).textContent =
+            "Group: Not applicable";
+
+        }
+
+        else if (studentGroup) {
+
+          document.getElementById(
+            "groupText"
+          ).textContent =
+            "Group: " + studentGroup;
+
+        }
+
+        else {
+
+          document.getElementById(
+            "groupText"
+          ).textContent =
+            "Group: Not selected";
+
+        }
 
       }
 
+      catch (error) {
 
-      // =====================================
-      // STUDENT NAME
-      // =====================================
+        console.error(
+          "Student loading error:",
+          error
+        );
 
-      const name =
-        user.user_metadata &&
-        user.user_metadata.full_name
-          ? user.user_metadata.full_name
-          : "Student";
+        document.getElementById(
+          "welcomeText"
+        ).textContent =
+          "Welcome, Student!";
 
-
-      // =====================================
-      // STUDENT CLASS
-      // =====================================
-
-      const studentClass =
-        user.user_metadata &&
-        user.user_metadata.student_class
-          ? user.user_metadata.student_class
-          : "Not selected";
-
-
-      // =====================================
-      // STUDENT GROUP
-      // =====================================
-
-      const studentGroup =
-        user.user_metadata &&
-        user.user_metadata.student_group
-          ? user.user_metadata.student_group
-          : "";
-
-
-      // =====================================
-      // SHOW NAME
-      // =====================================
-
-      document.getElementById(
-        "welcomeText"
-      ).textContent =
-        "Welcome, " + name + "!";
-
-
-      // =====================================
-      // SHOW EMAIL
-      // =====================================
-
-      document.getElementById(
-        "studentInfo"
-      ).textContent =
-        "Email: " + (user.email || "");
-
-
-      // =====================================
-      // SHOW CLASS
-      // =====================================
-
-      document.getElementById(
-        "classText"
-      ).textContent =
-        "Class: " + studentClass;
-
-
-      // =====================================
-      // SHOW GROUP
-      // =====================================
-
-      if (
-        studentClass === "8" ||
-        studentClass === "Class 8"
-      ) {
+        document.getElementById(
+          "classText"
+        ).textContent =
+          "Class: Unable to load";
 
         document.getElementById(
           "groupText"
         ).textContent =
-          "Group: Not applicable";
-
-      }
-
-      else if (studentGroup) {
-
-        document.getElementById(
-          "groupText"
-        ).textContent =
-          "Group: " + studentGroup;
-
-      }
-
-      else {
-
-        document.getElementById(
-          "groupText"
-        ).textContent =
-          "Group: Not selected";
+          "Group: Unable to load";
 
       }
 
