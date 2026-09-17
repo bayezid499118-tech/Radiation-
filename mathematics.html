@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mathematics - Radiation</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1565c0, #42a5f5);
+      color: white;
+      padding: 25px 20px;
+    }
+
+    header h1 {
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 15px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      margin: auto;
+      padding: 25px 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .top-bar h2 {
+      color: #1565c0;
+    }
+
+    .back-btn {
+      border: none;
+      padding: 11px 18px;
+      border-radius: 8px;
+      background: #1565c0;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chapters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+    }
+
+    .chapter-card {
+      background: white;
+      padding: 22px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .chapter-number {
+      color: #1565c0;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .chapter-card h3 {
+      margin-bottom: 10px;
+    }
+
+    .chapter-card p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .chapter-btn {
+      width: 100%;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      background: #2e7d32;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .chapter-btn:hover {
+      background: #1b5e20;
+    }
+
+    .notice {
+      background: white;
+      margin-top: 25px;
+      padding: 18px;
+      border-radius: 12px;
+      color: #555;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Radiation Mathematics</h1>
+    <p>Class 8 Mathematics</p>
+  </header>
+
+  <div class="container">
+
+    <div class="top-bar">
+
+      <h2>Chapters</h2>
+
+      <button
+        class="back-btn"
+        onclick="goDashboard()">
+        Back to Dashboard
+      </button>
+
+    </div>
+
+
+    <div class="chapters">
+
+      <div class="chapter-card">
+        <div class="chapter-number">
+          Chapter 01
+        </div>
+
+        <h3>Chapter 1</h3>
+
+        <p>
+          Lessons, videos, notes and tests
+          will be available here.
+        </p>
+
+        <button
+          class="chapter-btn"
+          onclick="openChapter(1)">
+          View Chapter
+        </button>
+      </div>
+
+
+      <div class="chapter-card">
+        <div class="chapter-number">
+          Chapter 02
+        </div>
+
+        <h3>Chapter 2</h3>
+
+        <p>
+          Lessons, videos, notes and tests
+          will be available here.
+        </p>
+
+        <button
+          class="chapter-btn"
+          onclick="openChapter(2)">
+          View Chapter
+        </button>
+      </div>
+
+
+      <div class="chapter-card">
+        <div class="chapter-number">
+          Chapter 03
+        </div>
+
+        <h3>Chapter 3</h3>
+
+        <p>
+          Lessons, videos, notes and tests
+          will be available here.
+        </p>
+
+        <button
+          class="chapter-btn"
+          onclick="openChapter(3)">
+          View Chapter
+        </button>
+      </div>
+
+
+      <div class="chapter-card">
+        <div class="chapter-number">
+          Chapter 04
+        </div>
+
+        <h3>Chapter 4</h3>
+
+        <p>
+          Lessons, videos, notes and tests
+          will be available here.
+        </p>
+
+        <button
+          class="chapter-btn"
+          onclick="openChapter(4)">
+          View Chapter
+        </button>
+      </div>
+
+
+      <div class="chapter-card">
+        <div class="chapter-number">
+          Chapter 05
+        </div>
+
+        <h3>Chapter 5</h3>
+
+        <p>
+          Lessons, videos, notes and tests
+          will be available here.
+        </p>
+
+        <button
+          class="chapter-btn"
+          onclick="openChapter(5)">
+          View Chapter
+        </button>
+      </div>
+
+
+      <div class="chapter-card">
+        <div class="chapter-number">
+          Chapter 06
+        </div>
+
+        <h3>Chapter 6</h3>
+
+        <p>
+          Lessons, videos, notes and tests
+          will be available here.
+        </p>
+
+        <button
+          class="chapter-btn"
+          onclick="openChapter(6)">
+          View Chapter
+        </button>
+      </div>
+
+    </div>
+
+
+    <div class="notice">
+      <strong>Coming soon:</strong>
+      Video classes, PDF notes, live classes,
+      quizzes and student progress will be added
+      inside each chapter.
+    </div>
+
+  </div>
+
+
+  <script>
+
+    function openChapter(chapterNumber) {
+
+      alert(
+        "Chapter " +
+        chapterNumber +
+        " page will be added next."
+      );
+
+    }
+
+
+    function goDashboard() {
+
+      window.location.href =
+        "student-dashboard.html";
+
+    }
+
+  </script>
+
+</body>
+  </html>
