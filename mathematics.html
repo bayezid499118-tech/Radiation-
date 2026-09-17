@@ -1,327 +1,235 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Mathematics - Radiation</title>
+  <title>Mathematics - Radiation</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: Arial, "Noto Sans Bengali", sans-serif;
-            background: #f4f6f8;
-            color: #222;
-        }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
 
-        /* Header */
-        header {
-            background: #2563eb;
-            color: white;
-            padding: 25px 15px;
-            text-align: center;
-        }
+    .header {
+      background: #111827;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-        header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
+    .header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
 
-        header p {
-            font-size: 16px;
-        }
+    .header p {
+      margin: 8px 0 0;
+      font-size: 15px;
+      opacity: 0.9;
+    }
 
-        /* Main container */
-        .container {
-            max-width: 1000px;
-            margin: 25px auto;
-            padding: 0 15px;
-        }
+    .container {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
 
-        /* Back button */
-        .back-btn {
-            display: inline-block;
-            background: #333;
-            color: white;
-            text-decoration: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
+    .back-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
 
-        .back-btn:hover {
-            background: #111;
-        }
+    .back-btn:hover {
+      background: #1d4ed8;
+    }
 
-        /* Page title */
-        .title {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+    .title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-        .title h2 {
-            font-size: 25px;
-            margin-bottom: 8px;
-        }
+    .title h2 {
+      margin: 0;
+      font-size: 25px;
+    }
 
-        .title p {
-            color: #666;
-            font-size: 15px;
-        }
+    .title p {
+      color: #666;
+      margin-top: 8px;
+    }
 
-        /* Chapters */
-        .chapters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 18px;
-        }
+    .chapter-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
 
-        /* Chapter card */
-        .chapter {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e5e7eb;
-        }
+    .chapter-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #e5e7eb;
+    }
 
-        .chapter-number {
-            color: #2563eb;
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
 
-        .chapter h3 {
-            font-size: 21px;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
+    .chapter-number {
+      color: #2563eb;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
 
-        /* Chapter button */
-        .chapter button {
-            width: 100%;
-            border: none;
-            background: #2563eb;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-        }
+    .chapter-name {
+      font-size: 19px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
 
-        .chapter button:hover {
-            background: #1d4ed8;
-        }
+    .chapter-card::after {
+      content: "→";
+      float: right;
+      font-size: 22px;
+      color: #2563eb;
+      margin-top: -28px;
+    }
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px 15px;
-            color: #666;
-        }
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 22px;
+      }
 
-        /* Mobile */
-        @media (max-width: 600px) {
+      .title h2 {
+        font-size: 22px;
+      }
 
-            header h1 {
-                font-size: 24px;
-            }
-
-            header p {
-                font-size: 14px;
-            }
-
-            .title h2 {
-                font-size: 22px;
-            }
-
-            .chapter h3 {
-                font-size: 19px;
-            }
-        }
-    </style>
+      .chapter-name {
+        font-size: 17px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <!-- Header -->
-    <header>
-        <h1>Radiation</h1>
-        <p>Class 8 Mathematics</p>
-    </header>
+  <div class="header">
+    <h1>Radiation</h1>
+    <p>Mathematics</p>
+  </div>
 
+  <div class="container">
 
-    <!-- Main -->
-    <div class="container">
+    <a href="student-dashboard.html" class="back-btn">
+      ← Back to Dashboard
+    </a>
 
-        <!-- Back to Dashboard -->
-        <a href="student-dashboard.html" class="back-btn">
-            ← Dashboard এ ফিরে যান
-        </a>
+    <div class="title">
+      <h2>গণিত</h2>
+      <p>অধ্যায় নির্বাচন করুন</p>
+    </div>
 
+    <div class="chapter-list">
 
-        <!-- Title -->
-        <div class="title">
-            <h2>গণিত</h2>
-            <p>অধ্যায় নির্বাচন করুন</p>
-        </div>
+      <!-- Chapter 1 -->
+      <div class="chapter-card" onclick="openChapter(1)">
+        <div class="chapter-number">অধ্যায় ১</div>
+        <div class="chapter-name">প্যাটার্ন</div>
+      </div>
 
+      <!-- Chapter 2 -->
+      <div class="chapter-card" onclick="openChapter(2)">
+        <div class="chapter-number">অধ্যায় ২</div>
+        <div class="chapter-name">মুনাফা</div>
+      </div>
 
-        <!-- All Chapters -->
-        <div class="chapters">
+      <!-- Chapter 3 -->
+      <div class="chapter-card" onclick="openChapter(3)">
+        <div class="chapter-number">অধ্যায় ৩</div>
+        <div class="chapter-name">পরিমাপ</div>
+      </div>
 
+      <!-- Chapter 4 -->
+      <div class="chapter-card" onclick="openChapter(4)">
+        <div class="chapter-number">অধ্যায় ৪</div>
+        <div class="chapter-name">বীজগণিতীয় সূত্রাবলি ও প্রয়োগ</div>
+      </div>
 
-            <!-- Chapter 1 -->
-            <div class="chapter">
-                <div class="chapter-number">প্রথম অধ্যায়</div>
-                <h3>প্যাটার্ন</h3>
+      <!-- Chapter 5 -->
+      <div class="chapter-card" onclick="openChapter(5)">
+        <div class="chapter-number">অধ্যায় ৫</div>
+        <div class="chapter-name">বীজগণিতীয় ভগ্নাংশ</div>
+      </div>
 
-                <button onclick="openChapter(1)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
+      <!-- Chapter 6 -->
+      <div class="chapter-card" onclick="openChapter(6)">
+        <div class="chapter-number">অধ্যায় ৬</div>
+        <div class="chapter-name">সরল সহসমীকরণ</div>
+      </div>
 
+      <!-- Chapter 7 -->
+      <div class="chapter-card" onclick="openChapter(7)">
+        <div class="chapter-number">অধ্যায় ৭</div>
+        <div class="chapter-name">সেট</div>
+      </div>
 
-            <!-- Chapter 2 -->
-            <div class="chapter">
-                <div class="chapter-number">দ্বিতীয় অধ্যায়</div>
-                <h3>মুনাফা</h3>
+      <!-- Chapter 8 -->
+      <div class="chapter-card" onclick="openChapter(8)">
+        <div class="chapter-number">অধ্যায় ৮</div>
+        <div class="chapter-name">চতুর্ভুজ</div>
+      </div>
 
-                <button onclick="openChapter(2)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
+      <!-- Chapter 9 -->
+      <div class="chapter-card" onclick="openChapter(9)">
+        <div class="chapter-number">অধ্যায় ৯</div>
+        <div class="chapter-name">পিথাগোরাসের উপপাদ্য</div>
+      </div>
 
+      <!-- Chapter 10 -->
+      <div class="chapter-card" onclick="openChapter(10)">
+        <div class="chapter-number">অধ্যায় ১০</div>
+        <div class="chapter-name">বৃত্ত</div>
+      </div>
 
-            <!-- Chapter 3 -->
-            <div class="chapter">
-                <div class="chapter-number">তৃতীয় অধ্যায়</div>
-                <h3>পরিমাপ</h3>
-
-                <button onclick="openChapter(3)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 4 -->
-            <div class="chapter">
-                <div class="chapter-number">চতুর্থ অধ্যায়</div>
-                <h3>বীজগণিতীয় সূত্রাবলি ও প্রয়োগ</h3>
-
-                <button onclick="openChapter(4)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 5 -->
-            <div class="chapter">
-                <div class="chapter-number">পঞ্চম অধ্যায়</div>
-                <h3>বীজগণিতীয় ভগ্নাংশ</h3>
-
-                <button onclick="openChapter(5)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 6 -->
-            <div class="chapter">
-                <div class="chapter-number">ষষ্ঠ অধ্যায়</div>
-                <h3>সরল সহসমীকরণ</h3>
-
-                <button onclick="openChapter(6)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 7 -->
-            <div class="chapter">
-                <div class="chapter-number">সপ্তম অধ্যায়</div>
-                <h3>সেট</h3>
-
-                <button onclick="openChapter(7)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 8 -->
-            <div class="chapter">
-                <div class="chapter-number">অষ্টম অধ্যায়</div>
-                <h3>চতুর্ভুজ</h3>
-
-                <button onclick="openChapter(8)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 9 -->
-            <div class="chapter">
-                <div class="chapter-number">নবম অধ্যায়</div>
-                <h3>পিথাগোরাসের উপপাদ্য</h3>
-
-                <button onclick="openChapter(9)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 10 -->
-            <div class="chapter">
-                <div class="chapter-number">দশম অধ্যায়</div>
-                <h3>বৃত্ত</h3>
-
-                <button onclick="openChapter(10)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-            <!-- Chapter 11 -->
-            <div class="chapter">
-                <div class="chapter-number">একাদশ অধ্যায়</div>
-                <h3>তথ্য ও উপাত্ত</h3>
-
-                <button onclick="openChapter(11)">
-                    অধ্যায়ে প্রবেশ করুন
-                </button>
-            </div>
-
-
-        </div>
+      <!-- Chapter 11 -->
+      <div class="chapter-card" onclick="openChapter(11)">
+        <div class="chapter-number">অধ্যায় ১১</div>
+        <div class="chapter-name">তথ্য ও উপাত্ত</div>
+      </div>
 
     </div>
 
+  </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>© Radiation Education</p>
-    </footer>
+  <script>
 
+    function openChapter(chapterNumber) {
 
-    <!-- JavaScript -->
-    <script>
+      window.location.href =
+        "chapter.html?subject=Mathematics&chapter=" + chapterNumber;
 
-        function openChapter(number) {
+    }
 
-            alert(
-                "অধ্যায় " + number +
-                " এর ক্লাস, ভিডিও, PDF, কুইজ ও লাইভ ক্লাস এখানে যুক্ত হবে।"
-            );
-
-        }
-
-    </script>
+  </script>
 
 </body>
 </html>
