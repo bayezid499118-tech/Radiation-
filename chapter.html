@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chapter - Radiation</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #111827;
+      color: white;
+      padding: 22px 15px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .header p {
+      margin: 7px 0 0;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 11px 18px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .chapter-info {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin-bottom: 22px;
+    }
+
+    .chapter-info h2 {
+      margin: 0;
+      font-size: 23px;
+    }
+
+    .chapter-info p {
+      color: #666;
+      margin: 8px 0 0;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .option {
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      min-height: 125px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+      transition: 0.2s;
+    }
+
+    .option:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .option h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .option p {
+      margin: 7px 0 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 21px;
+      }
+
+      .chapter-info h2 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>Radiation</h1>
+    <p id="subjectName">Subject</p>
+  </div>
+
+  <div class="container">
+
+    <a href="#" class="back-btn" id="backButton">
+      ← Back
+    </a>
+
+    <div class="chapter-info">
+      <h2 id="chapterTitle">অধ্যায়</h2>
+      <p>এই অধ্যায়ের জন্য একটি অপশন নির্বাচন করুন</p>
+    </div>
+
+    <div class="options">
+
+      <!-- Live Class -->
+      <div class="option" onclick="openLiveClass()">
+        <div class="icon">🔴</div>
+        <h3>Live Class</h3>
+        <p>লাইভ ক্লাসে যোগ দিন</p>
+      </div>
+
+      <!-- Recorded Class -->
+      <div class="option" onclick="openRecordedClass()">
+        <div class="icon">🎥</div>
+        <h3>Recorded Class</h3>
+        <p>রেকর্ড করা ক্লাস দেখুন</p>
+      </div>
+
+      <!-- Class Slides -->
+      <div class="option" onclick="openSlides()">
+        <div class="icon">📑</div>
+        <h3>Class Slides (PDF)</h3>
+        <p>ক্লাসের Slides দেখুন</p>
+      </div>
+
+      <!-- Online Exam -->
+      <div class="option" onclick="openExam()">
+        <div class="icon">📝</div>
+        <h3>Online Exam</h3>
+        <p>অনলাইন পরীক্ষায় অংশ নিন</p>
+      </div>
+
+      <!-- Student Progress -->
+      <div class="option" onclick="openProgress()">
+        <div class="icon">📊</div>
+        <h3>Student Progress</h3>
+        <p>আপনার অগ্রগতি দেখুন</p>
+      </div>
+
+      <!-- Live Chat -->
+      <div class="option" onclick="openChat()">
+        <div class="icon">💬</div>
+        <h3>Live Class Chat</h3>
+        <p>শিক্ষক ও শিক্ষার্থীদের সাথে যোগাযোগ</p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // URL থেকে Subject ও Chapter নেওয়া
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const subject = urlParams.get("subject") || "Mathematics";
+    const chapter = urlParams.get("chapter") || "1";
+
+
+    // Mathematics-এর অধ্যায়ের নাম
+    const mathematicsChapters = {
+
+      1: "প্যাটার্ন",
+      2: "মুনাফা",
+      3: "পরিমাপ",
+      4: "বীজগণিতীয় সূত্রাবলি ও প্রয়োগ",
+      5: "বীজগণিতীয় ভগ্নাংশ",
+      6: "সরল সহসমীকরণ",
+      7: "সেট",
+      8: "চতুর্ভুজ",
+      9: "পিথাগোরাসের উপপাদ্য",
+      10: "বৃত্ত",
+      11: "তথ্য ও উপাত্ত"
+
+    };
+
+
+    // অধ্যায়ের নাম দেখানো
+    let chapterName = "অধ্যায় " + chapter;
+
+    if (subject === "Mathematics" && mathematicsChapters[chapter]) {
+      chapterName = mathematicsChapters[chapter];
+    }
+
+
+    document.getElementById("subjectName").innerText = subject;
+
+    document.getElementById("chapterTitle").innerText =
+      "অধ্যায় " + chapter + " — " + chapterName;
+
+
+    // Back Button
+    document.getElementById("backButton").href =
+      "mathematics.html";
+
+
+    // নিচের ফাংশনগুলো পরের ধাপে আসল সিস্টেমের সাথে যুক্ত হবে
+
+    function openLiveClass() {
+      alert("Live Class সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+    }
+
+    function openRecordedClass() {
+      alert("Recorded Class সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+    }
+
+    function openSlides() {
+      alert("Class Slides (PDF) সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+    }
+
+    function openExam() {
+      alert("Online Exam সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+    }
+
+    function openProgress() {
+      alert("Student Progress সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+    }
+
+    function openChat() {
+      alert("Live Class Chat সিস্টেম পরের ধাপে যুক্ত করা হবে।");
+    }
+
+  </script>
+
+</body>
+  </html>
