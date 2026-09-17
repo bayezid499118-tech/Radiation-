@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Student Dashboard - Radiation</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,7 +14,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, "Noto Sans Bengali", sans-serif;
     }
 
     body {
@@ -46,17 +48,17 @@
       background: white;
       padding: 22px;
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
       margin-bottom: 25px;
     }
 
     .welcome h2 {
       color: #1565c0;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .welcome p {
-      margin-top: 6px;
+      margin-top: 8px;
       color: #555;
     }
 
@@ -75,7 +77,7 @@
       background: white;
       padding: 25px 20px;
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
       text-align: center;
       cursor: pointer;
       transition: 0.2s;
@@ -83,7 +85,7 @@
 
     .subject-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 7px 20px rgba(0,0,0,0.12);
+      box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
     }
 
     .subject-card h3 {
@@ -129,95 +131,147 @@
   </style>
 </head>
 
+
 <body>
 
+  <!-- HEADER -->
   <header>
+
     <h1>Radiation Student Dashboard</h1>
-    <p id="studentInfo">Loading student information...</p>
+
+    <p id="studentInfo">
+      Loading student information...
+    </p>
+
   </header>
 
+
+  <!-- MAIN -->
   <div class="container">
 
+
+    <!-- WELCOME BOX -->
     <div class="welcome">
 
       <h2 id="welcomeText">
-        Welcome!
+        Welcome, Student!
       </h2>
 
       <p id="classText">
-        Loading class information...
+        Class: Loading...
       </p>
 
       <p id="groupText">
-        Loading group information...
+        Group: Loading...
       </p>
 
     </div>
 
 
+    <!-- SUBJECT TITLE -->
     <h2 class="subjects-title">
-      Class 8 Subjects
+      My Subjects
     </h2>
 
 
+    <!-- SUBJECTS -->
     <div class="subjects">
 
+
+      <!-- BANGLA -->
       <div
         class="subject-card"
         onclick="openSubject('Bangla')"
       >
+
         <h3>Bangla</h3>
-        <p>Notes, lessons and resources</p>
+
+        <p>
+          Notes, lessons and resources
+        </p>
+
       </div>
 
 
+      <!-- ENGLISH -->
       <div
         class="subject-card"
         onclick="openSubject('English')"
       >
+
         <h3>English</h3>
-        <p>Notes, lessons and resources</p>
+
+        <p>
+          Notes, lessons and resources
+        </p>
+
       </div>
 
 
+      <!-- MATHEMATICS -->
       <div
         class="subject-card"
         onclick="openSubject('Mathematics')"
       >
+
         <h3>Mathematics</h3>
-        <p>Notes, lessons and resources</p>
+
+        <p>
+          Notes, lessons and resources
+        </p>
+
       </div>
 
 
+      <!-- SCIENCE -->
       <div
         class="subject-card"
         onclick="openSubject('Science')"
       >
+
         <h3>Science</h3>
-        <p>Notes, lessons and resources</p>
+
+        <p>
+          Notes, lessons and resources
+        </p>
+
       </div>
 
 
+      <!-- BGS -->
       <div
         class="subject-card"
         onclick="openSubject('BGS')"
       >
+
         <h3>BGS</h3>
-        <p>Notes, lessons and resources</p>
+
+        <p>
+          Notes, lessons and resources
+        </p>
+
       </div>
 
 
+      <!-- ICT -->
       <div
         class="subject-card"
         onclick="openSubject('ICT')"
       >
+
         <h3>ICT</h3>
-        <p>Notes, lessons and resources</p>
+
+        <p>
+          Notes, lessons and resources
+        </p>
+
       </div>
+
 
     </div>
 
 
+    <!-- ACTION BUTTONS -->
     <div class="actions">
 
       <button
@@ -226,6 +280,7 @@
       >
         My Profile
       </button>
+
 
       <button
         class="logout-btn"
@@ -239,10 +294,16 @@
 
     <p id="message"></p>
 
+
   </div>
 
 
+  <!-- JAVASCRIPT -->
   <script>
+
+    // =====================================
+    // SUPABASE CONNECTION
+    // =====================================
 
     const SUPABASE_URL =
       "https://yzgydftfucahiorefgoc.supabase.co";
@@ -258,38 +319,66 @@
       );
 
 
+    // =====================================
+    // LOAD STUDENT INFORMATION
+    // =====================================
+
     async function loadStudent() {
 
-      const {
-        data: { user },
-        error
-      } =
+      const result =
         await supabaseClient.auth.getUser();
 
+      const user =
+        result.data.user;
 
-      if (error || !user) {
+
+      // যদি Login করা না থাকে
+      if (!user) {
 
         window.location.href =
           "student-login.html";
 
         return;
+
       }
 
 
-      const name =
-        user.user_metadata?.full_name ||
-        "Student";
+      // =====================================
+      // STUDENT NAME
+      // =====================================
 
+      const name =
+        user.user_metadata &&
+        user.user_metadata.full_name
+          ? user.user_metadata.full_name
+          : "Student";
+
+
+      // =====================================
+      // STUDENT CLASS
+      // =====================================
 
       const studentClass =
-        user.user_metadata?.student_class ||
-        "";
+        user.user_metadata &&
+        user.user_metadata.student_class
+          ? user.user_metadata.student_class
+          : "Not selected";
 
+
+      // =====================================
+      // STUDENT GROUP
+      // =====================================
 
       const studentGroup =
-        user.user_metadata?.student_group ||
-        "";
+        user.user_metadata &&
+        user.user_metadata.student_group
+          ? user.user_metadata.student_group
+          : "";
 
+
+      // =====================================
+      // SHOW NAME
+      // =====================================
 
       document.getElementById(
         "welcomeText"
@@ -297,11 +386,19 @@
         "Welcome, " + name + "!";
 
 
+      // =====================================
+      // SHOW EMAIL
+      // =====================================
+
       document.getElementById(
         "studentInfo"
       ).textContent =
         "Email: " + (user.email || "");
 
+
+      // =====================================
+      // SHOW CLASS
+      // =====================================
 
       document.getElementById(
         "classText"
@@ -309,14 +406,14 @@
         "Class: " + studentClass;
 
 
-      if (studentGroup) {
+      // =====================================
+      // SHOW GROUP
+      // =====================================
 
-        document.getElementById(
-          "groupText"
-        ).textContent =
-          "Group: " + studentGroup;
-
-      } else {
+      if (
+        studentClass === "8" ||
+        studentClass === "Class 8"
+      ) {
 
         document.getElementById(
           "groupText"
@@ -325,8 +422,30 @@
 
       }
 
+      else if (studentGroup) {
+
+        document.getElementById(
+          "groupText"
+        ).textContent =
+          "Group: " + studentGroup;
+
+      }
+
+      else {
+
+        document.getElementById(
+          "groupText"
+        ).textContent =
+          "Group: Not selected";
+
+      }
+
     }
 
+
+    // =====================================
+    // OPEN SUBJECT
+    // =====================================
 
     function openSubject(subject) {
 
@@ -336,6 +455,7 @@
           "mathematics.html";
 
         return;
+
       }
 
 
@@ -348,6 +468,10 @@
     }
 
 
+    // =====================================
+    // PROFILE
+    // =====================================
+
     function showProfile() {
 
       document.getElementById(
@@ -357,6 +481,10 @@
 
     }
 
+
+    // =====================================
+    // LOGOUT
+    // =====================================
 
     async function logout() {
 
@@ -368,9 +496,14 @@
     }
 
 
+    // =====================================
+    // START
+    // =====================================
+
     loadStudent();
 
   </script>
 
 </body>
+
 </html>
