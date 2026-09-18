@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Teacher Management - Radiation</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #6a1b9a;
+      color: white;
+      padding: 22px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 27px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .top-box {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .top-box h2 {
+      color: #6a1b9a;
+      margin-bottom: 8px;
+    }
+
+    .count {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .table-box {
+      background: white;
+      border-radius: 14px;
+      padding: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th {
+      background: #6a1b9a;
+      color: white;
+      padding: 12px;
+      text-align: center;
+    }
+
+    td {
+      padding: 11px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    tr:hover {
+      background: #f7f1fa;
+    }
+
+    .active {
+      color: green;
+      font-weight: bold;
+    }
+
+    .blocked {
+      color: red;
+      font-weight: bold;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 13px;
+      border-radius: 7px;
+      cursor: pointer;
+      color: white;
+      font-size: 13px;
+      margin: 2px;
+    }
+
+    .remove-btn {
+      background: #ef6c00;
+    }
+
+    .remove-btn:hover {
+      background: #e65100;
+    }
+
+    .grant-btn {
+      background: #2e7d32;
+    }
+
+    .grant-btn:hover {
+      background: #1b5e20;
+    }
+
+    .block-btn {
+      background: #c62828;
+    }
+
+    .block-btn:hover {
+      background: #8e0000;
+    }
+
+    .back-btn {
+      display: block;
+      width: 220px;
+      margin: 25px auto 0;
+      background: #6a1b9a;
+      text-align: center;
+      text-decoration: none;
+      padding: 11px;
+      border-radius: 8px;
+      color: white;
+    }
+
+    .back-btn:hover {
+      background: #4a148c;
+    }
+
+    .message {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>👨‍🏫 Teacher Management</h1>
+  <p>Radiation Owner Panel</p>
+</header>
+
+<div class="container">
+
+  <div class="top-box">
+    <h2>Teacher Management</h2>
+
+    <div class="count">
+      Total Teachers:
+      <span id="teacherCount">0</span>
+    </div>
+  </div>
+
+  <div class="table-box">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>নাম</th>
+          <th>Email</th>
+          <th>Access</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="teacherTable">
+
+        <tr>
+          <td colspan="6" class="message">
+            Teacher data loading...
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <a href="owner-dashboard.html" class="back-btn">
+    ← Back to Owner Dashboard
+  </a>
+
+</div>
+
+
+<script>
+
+  /* =========================
+     SUPABASE
+  ========================= */
+
+  const SUPABASE_URL =
+    "https://yzgydftfucahiorefgoc.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  /* =========================
+     OWNER ID
+  ========================= */
+
+  const OWNER_ID =
+    "bde99e0b-525d-4818-b849-083f24e9e613";
+
+
+  /* =========================
+     OWNER CHECK
+  ========================= */
+
+  async function checkOwner() {
+
+    const {
+      data: { user },
+      error
+    } = await supabaseClient.auth.getUser();
+
+
+    if (error || !user) {
+
+      window.location.href =
+        "owner-login.html";
+
+      return false;
+    }
+
+
+    if (user.id !== OWNER_ID) {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "owner-login.html";
+
+      return false;
+    }
+
+
+    return true;
+  }
+
+
+  /* =========================
+     LOAD TEACHERS
+  ========================= */
+
+  async function loadTeachers() {
+
+    const allowed = await checkOwner();
+
+    if (!allowed) return;
+
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("role", "teacher")
+      .order("created_at", {
+        ascending: false
+      });
+
+
+    if (error) {
+
+      document.getElementById("teacherTable").innerHTML = `
+        <tr>
+          <td colspan="6" class="message">
+            Teacher data load করা যায়নি।
+            <br><br>
+            ${error.message}
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+
+    document.getElementById("teacherCount").textContent =
+      data.length;
+
+
+    const table =
+      document.getElementById("teacherTable");
+
+
+    if (data.length === 0) {
+
+      table.innerHTML = `
+        <tr>
+          <td colspan="6" class="message">
+            এখনো কোনো Teacher profile পাওয়া যায়নি।
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+
+    table.innerHTML = "";
+
+
+    data.forEach(teacher => {
+
+      const row =
+        document.createElement("tr");
+
+
+      /*
+        is_active = true
+        → Teacher-এর Access আছে
+        → Teacher কাজ করতে পারবে
+
+        is_active = false
+        → Access নেই
+        → Teacher কাজ করতে পারবে না
+      */
+
+
+      const access =
+        teacher.is_active === false
+          ? `<span class="blocked">No Access</span>`
+          : `<span class="active">Access Granted</span>`;
+
+
+      const status =
+        teacher.is_active === false
+          ? `<span class="blocked">Inactive</span>`
+          : `<span class="active">Active</span>`;
+
+
+      const actionButton =
+        teacher.is_active === false
+
+          ? `<button
+               class="btn grant-btn"
+               onclick="changeTeacherAccess('${teacher.id}', true)">
+               Grant Access
+             </button>`
+
+          : `
+             <button
+               class="btn remove-btn"
+               onclick="changeTeacherAccess('${teacher.id}', false)">
+               Remove Access
+             </button>
+
+             <button
+               class="btn block-btn"
+               onclick="changeTeacherAccess('${teacher.id}', false)">
+               Block
+             </button>
+            `;
+
+
+      const created =
+        teacher.created_at
+          ? new Date(teacher.created_at)
+              .toLocaleDateString("en-GB")
+          : "-";
+
+
+      row.innerHTML = `
+
+        <td>
+          ${teacher.full_name || "-"}
+        </td>
+
+        <td>
+          ${teacher.email || "-"}
+        </td>
+
+        <td>
+          ${access}
+        </td>
+
+        <td>
+          ${status}
+        </td>
+
+        <td>
+          ${created}
+        </td>
+
+        <td>
+          ${actionButton}
+        </td>
+
+      `;
+
+
+      table.appendChild(row);
+
+    });
+
+  }
+
+
+  /* =========================
+     GRANT / REMOVE ACCESS
+  ========================= */
+
+  async function changeTeacherAccess(
+    teacherId,
+    newStatus
+  ) {
+
+    const allowed = await checkOwner();
+
+    if (!allowed) return;
+
+
+    const action =
+      newStatus
+        ? "Grant Access"
+        : "Remove Access";
+
+
+    const confirmed =
+      confirm(
+        `আপনি কি Teacher-এর জন্য ${action} করতে চান?`
+      );
+
+
+    if (!confirmed) return;
+
+
+    const {
+      error
+    } = await supabaseClient
+      .from("profiles")
+      .update({
+        is_active: newStatus
+      })
+      .eq("id", teacherId)
+      .eq("role", "teacher");
+
+
+    if (error) {
+
+      alert(
+        "Access পরিবর্তন করা যায়নি:\n" +
+        error.message
+      );
+
+      return;
+    }
+
+
+    alert(
+      newStatus
+        ? "Teacher Access দেওয়া হয়েছে।"
+        : "Teacher Access তুলে নেওয়া হয়েছে।"
+    );
+
+
+    loadTeachers();
+
+  }
+
+
+  /* =========================
+     START
+  ========================= */
+
+  loadTeachers();
+
+</script>
+
+</body>
+  </html>
