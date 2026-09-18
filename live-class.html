@@ -6,230 +6,143 @@
 
   <title>Live Class - Radiation</title>
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f7fb;
+      background: #f1f5f9;
       color: #222;
     }
 
     .header {
-      background: #111827;
+      background: #2563eb;
       color: white;
-      padding: 20px 15px;
+      padding: 20px;
       text-align: center;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 25px;
-    }
-
-    .header p {
-      margin: 7px 0 0;
-      font-size: 15px;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 20px auto;
-      padding: 0 15px;
+      padding: 15px;
     }
 
-    .back-btn {
-      display: inline-block;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      padding: 10px 17px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-    }
-
-    .class-info {
+    .card {
       background: white;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      margin-bottom: 18px;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
 
-    .class-info h2 {
-      margin: 0 0 8px;
-      font-size: 21px;
+    h2 {
+      margin-top: 0;
     }
 
     .live-status {
-      display: inline-block;
-      background: #dc2626;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 13px;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 15px;
+      background: #fee2e2;
+      color: #b91c1c;
       font-weight: bold;
     }
 
-    .video-box {
-      background: #000;
+    .join-btn {
+      display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      box-sizing: border-box;
+      padding: 15px;
+      background: #16a34a;
       color: white;
       text-align: center;
-      margin-bottom: 20px;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 15px;
     }
 
-    .video-content {
+    .join-btn:hover {
+      background: #15803d;
+    }
+
+    .no-live {
+      text-align: center;
+      color: #666;
       padding: 20px;
     }
 
-    .video-icon {
-      font-size: 45px;
-      margin-bottom: 10px;
-    }
-
-    .video-content h3 {
-      margin: 0 0 8px;
-      font-size: 20px;
-    }
-
-    .video-content p {
-      margin: 0;
-      color: #ccc;
-      font-size: 14px;
-    }
-
-    .chat-box {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
-
-    .chat-header {
-      background: #111827;
-      color: white;
-      padding: 15px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .messages {
+    #messages {
       height: 300px;
       overflow-y: auto;
-      padding: 15px;
-      background: #f9fafb;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      background: #f8fafc;
+      margin-bottom: 10px;
     }
 
     .message {
       background: white;
-      padding: 10px 12px;
-      border-radius: 9px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border-left: 4px solid #2563eb;
     }
 
-    .message-name {
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
-    .message-text {
-      font-size: 14px;
-      color: #444;
-      word-break: break-word;
-    }
-
-    .reply {
-      margin-top: 8px;
-      padding: 8px 10px;
-      background: #eef4ff;
-      border-left: 3px solid #2563eb;
-      border-radius: 5px;
-      font-size: 13px;
-    }
-
-    .reply-name {
+    .student-name {
       font-weight: bold;
       color: #2563eb;
-      margin-bottom: 3px;
     }
 
-    .empty-message {
-      text-align: center;
+    .time {
+      font-size: 11px;
       color: #888;
-      padding-top: 100px;
-      font-size: 14px;
+      margin-left: 5px;
     }
 
-    .chat-input-area {
-      display: flex;
-      gap: 8px;
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      height: 80px;
       padding: 12px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .chat-input {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      outline: none;
-      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      resize: none;
+      font-size: 15px;
     }
 
     .send-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 13px;
       background: #2563eb;
       color: white;
       border: none;
-      padding: 0 18px;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-size: 16px;
       cursor: pointer;
-      font-size: 14px;
     }
 
-    .send-btn:hover {
-      background: #1d4ed8;
+    .back-btn {
+      display: block;
+      text-align: center;
+      background: #374151;
+      color: white;
+      padding: 13px;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-top: 20px;
     }
 
-    .send-btn:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-    }
-
-    @media (max-width: 600px) {
-
-      .header h1 {
-        font-size: 21px;
-      }
-
-      .class-info h2 {
-        font-size: 18px;
-      }
-
-      .messages {
-        height: 250px;
-      }
-
-      .chat-input-area {
-        padding: 10px;
-      }
-
-      .send-btn {
-        padding: 0 14px;
-      }
+    .loading {
+      text-align: center;
+      color: #666;
     }
   </style>
 </head>
@@ -238,517 +151,489 @@
 
   <div class="header">
     <h1>Radiation</h1>
-    <p id="subjectName">Mathematics</p>
+    <p>Live Class</p>
   </div>
 
   <div class="container">
 
-    <a href="#" class="back-btn" id="backButton">
-      ← Back to Chapter
+    <!-- LIVE CLASS -->
+    <div class="card">
+
+      <h2 id="classTitle">Live Class</h2>
+
+      <div id="liveStatus" class="loading">
+        Live Class খোঁজা হচ্ছে...
+      </div>
+
+      <div id="meetArea"></div>
+
+    </div>
+
+
+    <!-- CHAT -->
+    <div class="card">
+
+      <h2>💬 Live Class Chat</h2>
+
+      <div id="messages">
+        <div class="loading">মেসেজ লোড হচ্ছে...</div>
+      </div>
+
+      <textarea
+        id="messageInput"
+        placeholder="আপনার প্রশ্ন এখানে লিখুন..."
+      ></textarea>
+
+      <button class="send-btn" onclick="sendMessage()">
+        Send Question
+      </button>
+
+    </div>
+
+
+    <a href="mathematics.html" class="back-btn">
+      ← Mathematics এ ফিরে যান
     </a>
-
-    <div class="class-info">
-
-      <h2 id="chapterTitle">
-        Live Class
-      </h2>
-
-      <span class="live-status">
-        ● LIVE
-      </span>
-
-    </div>
-
-    <!-- Live Video -->
-    <div class="video-box">
-
-      <div class="video-content">
-
-        <div class="video-icon">
-          ▶
-        </div>
-
-        <h3>Live Class Video</h3>
-
-        <p>
-          শিক্ষক লাইভ ক্লাস শুরু করলে এখানে ভিডিও দেখা যাবে।
-        </p>
-
-      </div>
-
-    </div>
-
-    <!-- Chat -->
-    <div class="chat-box">
-
-      <div class="chat-header">
-        💬 Live Class Chat
-      </div>
-
-      <div class="messages" id="messages">
-
-        <div class="empty-message" id="emptyMessage">
-          মেসেজ লোড হচ্ছে...
-        </div>
-
-      </div>
-
-      <div class="chat-input-area">
-
-        <input
-          type="text"
-          id="chatInput"
-          class="chat-input"
-          placeholder="আপনার মন্তব্য লিখুন..."
-          maxlength="300"
-        >
-
-        <button
-          class="send-btn"
-          id="sendButton"
-          onclick="sendMessage()"
-        >
-          Send
-        </button>
-
-      </div>
-
-    </div>
 
   </div>
 
 
-  <script>
+<script>
 
-    // ==============================
-    // SUPABASE CONNECTION
-    // ==============================
+  /* ==============================
+     SUPABASE
+  ============================== */
 
-    const SUPABASE_URL =
-      "https://yzgydftfucahiorefgoc.supabase.co";
+  const SUPABASE_URL =
+    "https://yzgydftfucahiorefgoc.supabase.co";
 
-    const SUPABASE_KEY =
-      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+  const SUPABASE_KEY =
+    "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  /* ==============================
+     URL DATA
+  ============================== */
+
+  const params = new URLSearchParams(
+    window.location.search
+  );
+
+  const subjectFromURL =
+    params.get("subject") || "Mathematics";
+
+  const chapter =
+    parseInt(params.get("chapter")) || 1;
+
+
+  /* ==============================
+     SUBJECT
+  ============================== */
+
+  // Website-এর Mathematics এবং
+  // Teacher Dashboard-এর গণিত একই subject
+  let databaseSubject = subjectFromURL;
+
+  if (
+    subjectFromURL === "Mathematics" ||
+    subjectFromURL === "গণিত"
+  ) {
+    databaseSubject = "গণিত";
+  }
+
+
+  /* ==============================
+     STUDENT DATA
+  ============================== */
+
+  let currentUser = null;
+  let studentName = "";
+  let studentClass = "";
+  let studentGroup = null;
+
+
+  /* ==============================
+     LOAD STUDENT
+  ============================== */
+
+  async function loadStudent() {
+
+    const {
+      data: { user },
+      error
+    } = await supabaseClient.auth.getUser();
+
+    if (error || !user) {
+
+      window.location.href =
+        "student-login.html";
+
+      return false;
+    }
+
+    currentUser = user;
+
+    studentName =
+      user.user_metadata?.full_name ||
+      "Student";
+
+    studentClass =
+      String(
+        user.user_metadata?.student_class || ""
       );
 
+    studentGroup =
+      user.user_metadata?.student_group || null;
 
-    // ==============================
-    // URL DATA
-    // ==============================
-
-    const urlParams =
-      new URLSearchParams(window.location.search);
-
-    const subject =
-      urlParams.get("subject") || "Mathematics";
-
-    const chapter =
-      urlParams.get("chapter") || "1";
+    return true;
+  }
 
 
-    // ==============================
-    // MATHEMATICS CHAPTERS
-    // ==============================
+  /* ==============================
+     LOAD LIVE CLASS
+  ============================== */
 
-    const mathematicsChapters = {
+  async function loadLiveClass() {
 
-      1: "প্যাটার্ন",
-      2: "মুনাফা",
-      3: "পরিমাপ",
-      4: "বীজগণিতীয় সূত্রাবলি ও প্রয়োগ",
-      5: "বীজগণিতীয় ভগ্নাংশ",
-      6: "সরল সহসমীকরণ",
-      7: "সেট",
-      8: "চতুর্ভুজ",
-      9: "পিথাগোরাসের উপপাদ্য",
-      10: "বৃত্ত",
-      11: "তথ্য ও উপাত্ত"
-
-    };
+    document.getElementById("classTitle").innerText =
+      "Class " + studentClass +
+      " — " + databaseSubject +
+      " — Chapter " + chapter;
 
 
-    let chapterName =
-      "অধ্যায় " + chapter;
-
-
-    if (
-      subject === "Mathematics" &&
-      mathematicsChapters[chapter]
-    ) {
-
-      chapterName =
-        mathematicsChapters[chapter];
-
-    }
-
-
-    document.getElementById("subjectName").innerText =
-      subject;
-
-
-    document.getElementById("chapterTitle").innerText =
-      "অধ্যায় " + chapter +
-      " — " + chapterName;
-
-
-    // ==============================
-    // BACK BUTTON
-    // ==============================
-
-    document.getElementById("backButton").href =
-      "chapter.html?subject=" +
-      encodeURIComponent(subject) +
-      "&chapter=" +
-      encodeURIComponent(chapter);
-
-
-    // ==============================
-    // STUDENT NAME
-    // ==============================
-
-    let studentName = "Student";
-
-
-    // ==============================
-    // LOAD CURRENT USER
-    // ==============================
-
-    async function loadUser() {
-
-      const {
-        data: {
-          user
-        }
-      } = await supabaseClient.auth.getUser();
-
-
-      if (!user) {
-
-        alert("অনুগ্রহ করে আগে Student Login করুন।");
-
-        window.location.href =
-          "student-login.html";
-
-        return false;
-
-      }
-
-
-      studentName =
-        user.user_metadata?.full_name ||
-        "Student";
-
-
-      return true;
-
-    }
-
-
-    // ==============================
-    // LOAD CHAT MESSAGES
-    // ==============================
-
-    async function loadMessages() {
-
-      const {
-        data,
-        error
-      } = await supabaseClient
-
-        .from("live_chat_messages")
-
+    let query =
+      supabaseClient
+        .from("live_classes")
         .select("*")
-
-        .eq("subject", subject)
-
-        .eq("chapter", parseInt(chapter))
-
+        .eq("class_name", studentClass)
+        .eq("subject", databaseSubject)
+        .eq("chapter", chapter)
         .order("created_at", {
-          ascending: true
-        });
+          ascending: false
+        })
+        .limit(1);
 
 
-      if (error) {
+    // Class 9-12 হলে Group-ও মিলবে
+    if (studentClass !== "8" && studentGroup) {
 
-        console.error(error);
-
-        document.getElementById("messages").innerHTML =
-          '<div class="empty-message">' +
-          'মেসেজ লোড করা যায়নি।' +
-          '</div>';
-
-        return;
-
-      }
-
-
-      displayMessages(data || []);
+      query = query.eq(
+        "group_name",
+        studentGroup
+      );
 
     }
 
 
-    // ==============================
-    // DISPLAY MESSAGES
-    // ==============================
-
-    function displayMessages(data) {
-
-      const messages =
-        document.getElementById("messages");
+    const {
+      data,
+      error
+    } = await query;
 
 
-      messages.innerHTML = "";
+    const status =
+      document.getElementById("liveStatus");
+
+    const meetArea =
+      document.getElementById("meetArea");
 
 
-      if (data.length === 0) {
+    if (error) {
 
-        messages.innerHTML =
-          '<div class="empty-message">' +
-          'এখনো কোনো মন্তব্য নেই।' +
-          '</div>';
+      console.error(error);
 
-        return;
+      status.innerText =
+        "Live Class লোড করতে সমস্যা হয়েছে।";
 
-      }
+      status.style.background = "#fee2e2";
+      status.style.color = "#b91c1c";
 
-
-      data.forEach(function(item) {
-
-        const messageDiv =
-          document.createElement("div");
-
-        messageDiv.className =
-          "message";
+      return;
+    }
 
 
-        const nameDiv =
-          document.createElement("div");
+    if (!data || data.length === 0) {
 
-        nameDiv.className =
-          "message-name";
+      status.innerText =
+        "🔴 এই Chapter-এর Live Class এখনো শুরু হয়নি।";
 
-        nameDiv.textContent =
-          item.student_name;
+      status.style.background = "#fef3c7";
+      status.style.color = "#92400e";
 
+      meetArea.innerHTML = "";
 
-        const textDiv =
-          document.createElement("div");
-
-        textDiv.className =
-          "message-text";
-
-        textDiv.textContent =
-          item.message;
+      return;
+    }
 
 
-        messageDiv.appendChild(nameDiv);
-
-        messageDiv.appendChild(textDiv);
+    const liveClass = data[0];
 
 
-        // Teacher Reply থাকলে দেখাবে
+    status.innerText =
+      "🔴 LIVE — Class " +
+      studentClass +
+      " — " +
+      databaseSubject +
+      " — Chapter " +
+      chapter;
 
-        if (item.teacher_reply) {
-
-          const replyDiv =
-            document.createElement("div");
-
-          replyDiv.className =
-            "reply";
-
-
-          const replyName =
-            document.createElement("div");
-
-          replyName.className =
-            "reply-name";
-
-          replyName.textContent =
-            "Teacher Reply";
+    status.style.background = "#dcfce7";
+    status.style.color = "#166534";
 
 
-          const replyText =
-            document.createElement("div");
+    meetArea.innerHTML = `
 
-          replyText.textContent =
-            item.teacher_reply;
+      <a
+        href="${liveClass.meet_link}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="join-btn"
+      >
+        🎥 Join Live Class
+      </a>
+
+    `;
+
+  }
 
 
-          replyDiv.appendChild(replyName);
+  /* ==============================
+     LOAD CHAT
+  ============================== */
 
-          replyDiv.appendChild(replyText);
+  async function loadMessages() {
 
-          messageDiv.appendChild(replyDiv);
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("live_chat_messages")
+      .select("*")
+      .eq("subject", subjectFromURL)
+      .eq("chapter", chapter)
+      .order("created_at", {
+        ascending: true
+      });
 
-        }
+
+    const messages =
+      document.getElementById("messages");
 
 
-        messages.appendChild(messageDiv);
+    if (error) {
+
+      console.error(error);
+
+      messages.innerHTML =
+        "<p>Chat লোড করা যায়নি।</p>";
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      messages.innerHTML =
+        "<p style='text-align:center;color:#777;'>এখনো কোনো প্রশ্ন নেই।</p>";
+
+      return;
+    }
+
+
+    messages.innerHTML = "";
+
+
+    data.forEach(item => {
+
+      const div =
+        document.createElement("div");
+
+      div.className = "message";
+
+
+      const time =
+        new Date(item.created_at)
+          .toLocaleTimeString(
+            "bn-BD",
+            {
+              hour: "2-digit",
+              minute: "2-digit"
+            }
+          );
+
+
+      div.innerHTML = `
+
+        <span class="student-name">
+          ${escapeHTML(item.student_name)}
+        </span>
+
+        <span class="time">
+          ${time}
+        </span>
+
+        <br>
+
+        <span>
+          ${escapeHTML(item.message)}
+        </span>
+
+      `;
+
+
+      messages.appendChild(div);
+
+    });
+
+
+    messages.scrollTop =
+      messages.scrollHeight;
+
+  }
+
+
+  /* ==============================
+     SEND MESSAGE
+  ============================== */
+
+  async function sendMessage() {
+
+    const input =
+      document.getElementById(
+        "messageInput"
+      );
+
+    const message =
+      input.value.trim();
+
+
+    if (!message) {
+
+      alert("প্রথমে প্রশ্ন লিখুন।");
+
+      return;
+    }
+
+
+    const {
+      error
+    } = await supabaseClient
+      .from("live_chat_messages")
+      .insert({
+
+        subject: subjectFromURL,
+
+        chapter: chapter,
+
+        student_name: studentName,
+
+        message: message
 
       });
 
 
-      messages.scrollTop =
-        messages.scrollHeight;
+    if (error) {
 
-    }
+      console.error(error);
 
-
-    // ==============================
-    // SEND MESSAGE
-    // ==============================
-
-    async function sendMessage() {
-
-      const input =
-        document.getElementById("chatInput");
-
-      const button =
-        document.getElementById("sendButton");
-
-
-      const message =
-        input.value.trim();
-
-
-      if (message === "") {
-
-        return;
-
-      }
-
-
-      button.disabled = true;
-
-      button.innerText = "Sending...";
-
-
-      const {
-        data: {
-          user
-        }
-      } = await supabaseClient.auth.getUser();
-
-
-      if (!user) {
-
-        alert("অনুগ্রহ করে আগে Login করুন.");
-
-        window.location.href =
-          "student-login.html";
-
-        return;
-
-      }
-
-
-      const name =
-        user.user_metadata?.full_name ||
-        "Student";
-
-
-      const {
-        error
-      } = await supabaseClient
-
-        .from("live_chat_messages")
-
-        .insert({
-
-          subject: subject,
-
-          chapter: parseInt(chapter),
-
-          student_name: name,
-
-          message: message
-
-        });
-
-
-      if (error) {
-
-        console.error(error);
-
-        alert(
-          "মেসেজ পাঠানো যায়নি। আবার চেষ্টা করুন।"
-        );
-
-      } else {
-
-        input.value = "";
-
-        await loadMessages();
-
-      }
-
-
-      button.disabled = false;
-
-      button.innerText = "Send";
-
-    }
-
-
-    // ==============================
-    // ENTER KEY
-    // ==============================
-
-    document
-      .getElementById("chatInput")
-      .addEventListener(
-        "keydown",
-        function(event) {
-
-          if (event.key === "Enter") {
-
-            sendMessage();
-
-          }
-
-        }
+      alert(
+        "প্রশ্ন পাঠানো যায়নি। আবার চেষ্টা করুন।"
       );
 
-
-    // ==============================
-    // START
-    // ==============================
-
-    async function startPage() {
-
-      const loggedIn =
-        await loadUser();
-
-
-      if (!loggedIn) {
-
-        return;
-
-      }
-
-
-      await loadMessages();
-
-
-      // প্রতি ৫ সেকেন্ডে নতুন মেসেজ/
-      // Teacher Reply চেক করবে
-
-      setInterval(
-        loadMessages,
-        5000
-      );
-
+      return;
     }
 
 
-    startPage();
+    input.value = "";
 
-  </script>
+    await loadMessages();
+
+  }
+
+
+  /* ==============================
+     ENTER KEY
+  ============================== */
+
+  document
+    .getElementById("messageInput")
+    .addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter" &&
+          !event.shiftKey
+        ) {
+
+          event.preventDefault();
+
+          sendMessage();
+
+        }
+
+      }
+    );
+
+
+  /* ==============================
+     HTML SECURITY
+  ============================== */
+
+  function escapeHTML(text) {
+
+    const div =
+      document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+  }
+
+
+  /* ==============================
+     START
+  ============================== */
+
+  async function startPage() {
+
+    const loggedIn =
+      await loadStudent();
+
+    if (!loggedIn) return;
+
+
+    await loadLiveClass();
+
+    await loadMessages();
+
+
+    // প্রতি 5 সেকেন্ডে Chat refresh
+    setInterval(
+      loadMessages,
+      5000
+    );
+
+
+    // প্রতি 10 সেকেন্ডে Live Class refresh
+    setInterval(
+      loadLiveClass,
+      10000
+    );
+
+  }
+
+
+  startPage();
+
+</script>
 
 </body>
 </html>
