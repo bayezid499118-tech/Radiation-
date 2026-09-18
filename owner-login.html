@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiation - Owner Dashboard</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f5f9;
+    }
+
+    header {
+      background: #2563eb;
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .logout {
+      background: white;
+      color: #2563eb;
+    }
+
+    .content {
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <strong>Radiation Owner Dashboard</strong>
+    <button class="logout" id="logoutBtn">Logout</button>
+  </header>
+
+  <div class="content">
+    <h2>Welcome, Owner</h2>
+    <p>এখান থেকে Radiation ওয়েব অ্যাপ পরিচালনা করা যাবে।</p>
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+
+    // Login না থাকলে আবার Owner Login-এ পাঠাবে
+    onAuthStateChanged(auth, (user) => {
+
+      if (!user || user.email.toLowerCase() !== "bayezid7131@gmail.com") {
+        window.location.href = "owner-login.html";
+      }
+
+    });
+
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+      await signOut(auth);
+
+      window.location.href = "owner-login.html";
+
+    });
+
+  </script>
+
+</body>
+</html>
