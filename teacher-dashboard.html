@@ -61,13 +61,20 @@
       font-weight: bold;
     }
 
-    select {
+    select,
+    input {
       width: 100%;
       padding: 12px;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 15px;
       background: white;
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #666;
+      margin-top: 6px;
     }
 
     .live-status {
@@ -194,9 +201,26 @@
       <!-- Chapter -->
       <label for="chapterSelect">Chapter</label>
 
-      <select id="chapterSelect" disabled>
+      <select id="chapterSelect" onchange="chapterChanged()" disabled>
         <option value="">Select Chapter</option>
       </select>
+
+
+      <!-- Meet Link -->
+      <label for="meetLink">
+        Google Meet Link
+      </label>
+
+      <input
+        type="url"
+        id="meetLink"
+        placeholder="https://meet.google.com/..."
+        disabled
+      >
+
+      <div class="hint">
+        Google Meet থেকে কপি করা Meeting Link এখানে দিন।
+      </div>
 
 
       <!-- Live Status -->
@@ -264,6 +288,9 @@
      CURRENT TEACHER
   ========================= */
 
+  let currentTeacher = null;
+
+
   async function loadTeacher() {
 
     const {
@@ -290,6 +317,8 @@
 
       return;
     }
+
+    currentTeacher = user;
 
     document.getElementById("teacherName")
       .innerText =
@@ -447,6 +476,27 @@
 
 
   /* =========================
+     CLASS 8 MATHEMATICS
+  ========================= */
+
+  const class8MathChapters = [
+
+    "অধ্যায় ১ — প্যাটার্ন",
+    "অধ্যায় ২ — মুনাফা",
+    "অধ্যায় ৩ — পরিমাপ",
+    "অধ্যায় ৪ — বীজগণিতীয় সূত্রাবলি ও প্রয়োগ",
+    "অধ্যায় ৫ — বীজগণিতীয় ভগ্নাংশ",
+    "অধ্যায় ৬ — সরল সহসমীকরণ",
+    "অধ্যায় ৭ — সেট",
+    "অধ্যায় ৮ — চতুর্ভুজ",
+    "অধ্যায় ৯ — পিথাগোরাসের উপপাদ্য",
+    "অধ্যায় ১০ — বৃত্ত",
+    "অধ্যায় ১১ — তথ্য ও উপাত্ত"
+
+  ];
+
+
+  /* =========================
      CLASS CHANGED
   ========================= */
 
@@ -467,15 +517,23 @@
     const chapterSelect =
       document.getElementById("chapterSelect");
 
-    chapterSelect.innerHTML =
-      '<option value="">Select Chapter</option>';
+    const meetLink =
+      document.getElementById("meetLink");
 
-    chapterSelect.disabled = true;
+
+    groupSelect.value = "";
 
     subjectSelect.innerHTML =
       '<option value="">Select Subject</option>';
 
+    chapterSelect.innerHTML =
+      '<option value="">Select Chapter</option>';
+
+    meetLink.value = "";
+
     subjectSelect.disabled = true;
+    chapterSelect.disabled = true;
+    meetLink.disabled = true;
 
     document.getElementById("startButton")
       .disabled = true;
@@ -489,7 +547,6 @@
     }
 
 
-    /* Class 8 */
     if (classValue === "8") {
 
       groupBox.style.display = "none";
@@ -502,10 +559,7 @@
     }
 
 
-    /* Class 9-12 */
     groupBox.style.display = "block";
-
-    groupSelect.value = "";
 
   }
 
@@ -522,12 +576,14 @@
     const groupValue =
       document.getElementById("groupSelect").value;
 
+
     if (!groupValue) return;
 
 
     loadSubjects(
       subjects[classValue][groupValue]
     );
+
   }
 
 
@@ -550,6 +606,7 @@
         document.createElement("option");
 
       option.value = subject;
+
       option.textContent = subject;
 
       subjectSelect.appendChild(option);
@@ -577,9 +634,16 @@
     const chapterSelect =
       document.getElementById("chapterSelect");
 
+    const meetLink =
+      document.getElementById("meetLink");
+
 
     chapterSelect.innerHTML =
       '<option value="">Select Chapter</option>';
+
+    meetLink.value = "";
+
+    meetLink.disabled = true;
 
     document.getElementById("startButton")
       .disabled = true;
@@ -594,10 +658,8 @@
 
 
     /*
-      আপাতত Mathematics-এর
-      Class 8 chapter list দেওয়া হলো।
-      পরের ধাপে প্রতিটি Subject-এর
-      NCTB chapter list বসানো হবে।
+      বর্তমানে Class 8 Mathematics
+      chapter list যুক্ত করা হয়েছে।
     */
 
     if (
@@ -605,36 +667,20 @@
       subjectValue === "গণিত"
     ) {
 
-      const chapters = [
+      class8MathChapters.forEach(
+        function(chapter, index) {
 
-        "অধ্যায় ১ — প্যাটার্ন",
-        "অধ্যায় ২ — মুনাফা",
-        "অধ্যায় ৩ — পরিমাপ",
-        "অধ্যায় ৪ — বীজগণিতীয় সূত্রাবলি ও প্রয়োগ",
-        "অধ্যায় ৫ — বীজগণিতীয় ভগ্নাংশ",
-        "অধ্যায় ৬ — সরল সহসমীকরণ",
-        "অধ্যায় ৭ — সেট",
-        "অধ্যায় ৮ — চতুর্ভুজ",
-        "অধ্যায় ৯ — পিথাগোরাসের উপপাদ্য",
-        "অধ্যায় ১০ — বৃত্ত",
-        "অধ্যায় ১১ — তথ্য ও উপাত্ত"
+          const option =
+            document.createElement("option");
 
-      ];
+          option.value = index + 1;
 
+          option.textContent = chapter;
 
-      chapters.forEach(function(chapter, index) {
+          chapterSelect.appendChild(option);
 
-        const option =
-          document.createElement("option");
-
-        option.value = index + 1;
-
-        option.textContent = chapter;
-
-        chapterSelect.appendChild(option);
-
-      });
-
+        }
+      );
 
       chapterSelect.disabled = false;
 
@@ -643,8 +689,8 @@
 
 
     /*
-      অন্য Subject-এর chapter
-      পরের ধাপে যোগ করা হবে।
+      অন্য Subject-এর chapter list
+      পরবর্তী ধাপে যুক্ত হবে।
     */
 
     const option =
@@ -663,16 +709,43 @@
 
 
   /* =========================
-     START LIVE
+     CHAPTER CHANGED
   ========================= */
 
-  function startLive() {
+  function chapterChanged() {
+
+    const chapterValue =
+      document.getElementById("chapterSelect").value;
+
+    const meetLink =
+      document.getElementById("meetLink");
+
+    if (!chapterValue) {
+
+      meetLink.disabled = true;
+
+      document.getElementById("startButton")
+        .disabled = true;
+
+      return;
+    }
+
+
+    meetLink.disabled = false;
+
+    checkReady();
+
+  }
+
+
+  /* =========================
+     CHECK READY
+  ========================= */
+
+  function checkReady() {
 
     const classValue =
       document.getElementById("classSelect").value;
-
-    const groupValue =
-      document.getElementById("groupSelect").value;
 
     const subjectValue =
       document.getElementById("subjectSelect").value;
@@ -680,32 +753,165 @@
     const chapterValue =
       document.getElementById("chapterSelect").value;
 
+    const meetValue =
+      document.getElementById("meetLink").value.trim();
 
-    if (!classValue ||
-        !subjectValue ||
-        !chapterValue) {
+
+    const ready =
+      classValue &&
+      subjectValue &&
+      chapterValue &&
+      meetValue;
+
+
+    document.getElementById("startButton")
+      .disabled = !ready;
+
+  }
+
+
+  /* =========================
+     MEET INPUT
+  ========================= */
+
+  document
+    .getElementById("meetLink")
+    .addEventListener(
+      "input",
+      checkReady
+    );
+
+
+  /* =========================
+     START LIVE
+  ========================= */
+
+  async function startLive() {
+
+    if (!currentTeacher) {
 
       document.getElementById("message")
         .innerText =
-        "Class, Subject এবং Chapter নির্বাচন করুন।";
+        "Teacher account পাওয়া যায়নি।";
 
       return;
     }
 
 
-    let text =
+    const classValue =
+      document.getElementById("classSelect").value;
+
+    const groupValue =
+      document.getElementById("groupSelect").value || null;
+
+    const subjectValue =
+      document.getElementById("subjectSelect").value;
+
+    const chapterValue =
+      document.getElementById("chapterSelect").value;
+
+    const meetValue =
+      document.getElementById("meetLink").value.trim();
+
+
+    if (
+      !classValue ||
+      !subjectValue ||
+      !chapterValue ||
+      !meetValue
+    ) {
+
+      document.getElementById("message")
+        .innerText =
+        "সব তথ্য পূরণ করুন।";
+
+      return;
+    }
+
+
+    /* Google Meet link check */
+
+    if (
+      !meetValue.startsWith("https://meet.google.com/")
+    ) {
+
+      document.getElementById("message")
+        .innerText =
+        "সঠিক Google Meet link দিন।";
+
+      return;
+    }
+
+
+    document.getElementById("startButton")
+      .disabled = true;
+
+
+    document.getElementById("message")
+      .style.color = "#555";
+
+    document.getElementById("message")
+      .innerText =
+      "Live Class সংরক্ষণ করা হচ্ছে...";
+
+
+    /* Save to Supabase */
+
+    const { data, error } =
+      await supabaseClient
+        .from("live_classes")
+        .insert({
+
+          class_name: classValue,
+
+          group_name: groupValue,
+
+          subject: subjectValue,
+
+          chapter: Number(chapterValue),
+
+          meet_link: meetValue,
+
+          teacher_id: currentTeacher.id
+
+        })
+        .select();
+
+
+    if (error) {
+
+      console.error(error);
+
+      document.getElementById("message")
+        .style.color = "#b91c1c";
+
+      document.getElementById("message")
+        .innerText =
+        "Live Class সংরক্ষণ করা যায়নি।";
+
+      document.getElementById("startButton")
+        .disabled = false;
+
+      return;
+    }
+
+
+    /* Show LIVE */
+
+    let statusText =
       "● LIVE — Class " +
       classValue;
 
 
     if (groupValue) {
 
-      text +=
+      statusText +=
         " — " + groupValue;
+
     }
 
 
-    text +=
+    statusText +=
       " — " +
       subjectValue +
       " — Chapter " +
@@ -713,14 +919,12 @@
 
 
     document.getElementById("liveStatus")
-      .innerText = text;
+      .innerText =
+      statusText;
 
     document.getElementById("liveStatus")
       .classList.add("live");
 
-
-    document.getElementById("startButton")
-      .disabled = true;
 
     document.getElementById("stopButton")
       .disabled = false;
@@ -738,13 +942,16 @@
     document.getElementById("chapterSelect")
       .disabled = true;
 
+    document.getElementById("meetLink")
+      .disabled = true;
+
 
     document.getElementById("message")
       .style.color = "green";
 
     document.getElementById("message")
       .innerText =
-      "Live Class চালু হয়েছে।";
+      "Live Class চালু হয়েছে এবং Meet Link সংরক্ষণ হয়েছে।";
 
   }
 
@@ -782,6 +989,9 @@
     document.getElementById("chapterSelect")
       .disabled = false;
 
+    document.getElementById("meetLink")
+      .disabled = false;
+
 
     document.getElementById("message")
       .style.color = "#555";
@@ -803,6 +1013,7 @@
 
     window.location.href =
       "teacher-login.html";
+
   }
 
 
@@ -815,4 +1026,4 @@
 </script>
 
 </body>
-        </html>
+  </html>
