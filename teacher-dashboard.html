@@ -139,11 +139,13 @@
       <h2>Teacher Information</h2>
 
       <div class="teacher-name">
-        Teacher: <strong id="teacherName">Loading...</strong>
+        Teacher:
+        <strong id="teacherName">Loading...</strong>
       </div>
 
       <div>
-        Email: <span id="teacherEmail">Loading...</span>
+        Email:
+        <span id="teacherEmail">Loading...</span>
       </div>
     </div>
 
@@ -153,101 +155,74 @@
 
       <h2>Start Live Class</h2>
 
-      <label for="subject">
-        Subject
-      </label>
+      <!-- Class -->
+      <label for="classSelect">Class</label>
 
-      <select id="subject">
-        <option value="Mathematics">
-          Mathematics
-        </option>
+      <select id="classSelect" onchange="classChanged()">
+        <option value="">Select Class</option>
+        <option value="8">Class 8</option>
+        <option value="9">Class 9</option>
+        <option value="10">Class 10</option>
+        <option value="11">Class 11</option>
+        <option value="12">Class 12</option>
       </select>
 
 
-      <label for="chapter">
-        Chapter
-      </label>
+      <!-- Group -->
+      <div id="groupBox" style="display:none;">
 
-      <select id="chapter">
+        <label for="groupSelect">Group</label>
 
-        <option value="1">
-          অধ্যায় ১ — প্যাটার্ন
-        </option>
+        <select id="groupSelect" onchange="groupChanged()">
+          <option value="">Select Group</option>
+          <option value="Science">Science</option>
+          <option value="Arts">Arts</option>
+          <option value="Commerce">Commerce</option>
+        </select>
 
-        <option value="2">
-          অধ্যায় ২ — মুনাফা
-        </option>
+      </div>
 
-        <option value="3">
-          অধ্যায় ৩ — পরিমাপ
-        </option>
 
-        <option value="4">
-          অধ্যায় ৪ — বীজগণিতীয় সূত্রাবলি ও প্রয়োগ
-        </option>
+      <!-- Subject -->
+      <label for="subjectSelect">Subject</label>
 
-        <option value="5">
-          অধ্যায় ৫ — বীজগণিতীয় ভগ্নাংশ
-        </option>
-
-        <option value="6">
-          অধ্যায় ৬ — সরল সহসমীকরণ
-        </option>
-
-        <option value="7">
-          অধ্যায় ৭ — সেট
-        </option>
-
-        <option value="8">
-          অধ্যায় ৮ — চতুর্ভুজ
-        </option>
-
-        <option value="9">
-          অধ্যায় ৯ — পিথাগোরাসের উপপাদ্য
-        </option>
-
-        <option value="10">
-          অধ্যায় ১০ — বৃত্ত
-        </option>
-
-        <option value="11">
-          অধ্যায় ১১ — তথ্য ও উপাত্ত
-        </option>
-
+      <select id="subjectSelect" onchange="subjectChanged()" disabled>
+        <option value="">Select Subject</option>
       </select>
 
 
-      <div
-        class="live-status"
-        id="liveStatus"
-      >
+      <!-- Chapter -->
+      <label for="chapterSelect">Chapter</label>
+
+      <select id="chapterSelect" disabled>
+        <option value="">Select Chapter</option>
+      </select>
+
+
+      <!-- Live Status -->
+      <div class="live-status" id="liveStatus">
         ● Live Class বন্ধ
       </div>
 
 
+      <!-- Buttons -->
       <button
         class="start-btn"
         id="startButton"
         onclick="startLive()"
-      >
+        disabled>
         Start Live Class
       </button>
-
 
       <button
         class="stop-btn"
         id="stopButton"
         onclick="stopLive()"
-        disabled
-      >
+        disabled>
         Stop Live Class
       </button>
 
-
-      <div
-        class="message"
-        id="message"
-      ></div>
+      <div class="message" id="message"></div>
 
     </div>
 
@@ -257,8 +232,7 @@
 
       <button
         class="logout-btn"
-        onclick="logout()"
-      >
+        onclick="logout()">
         Logout
       </button>
 
@@ -267,188 +241,578 @@
   </div>
 
 
-  <script>
+<script>
 
-    // ==============================
-    // SUPABASE
-    // ==============================
+  /* =========================
+     SUPABASE
+  ========================= */
 
-    const SUPABASE_URL =
-      "https://yzgydftfucahiorefgoc.supabase.co";
+  const SUPABASE_URL =
+    "https://yzgydftfucahiorefgoc.supabase.co";
 
-    const SUPABASE_KEY =
-      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+  const SUPABASE_KEY =
+    "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-
-    // ==============================
-    // TEACHER LOGIN CHECK
-    // ==============================
-
-    async function loadTeacher() {
-
-      const {
-        data: {
-          user
-        }
-      } = await supabaseClient.auth.getUser();
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
-      if (!user) {
+  /* =========================
+     CURRENT TEACHER
+  ========================= */
 
-        window.location.href =
-          "teacher-login.html";
+  async function loadTeacher() {
 
-        return;
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
 
-      }
+    if (!user) {
 
+      window.location.href =
+        "teacher-login.html";
 
-      const role =
-        user.user_metadata?.role;
-
-
-      if (role !== "teacher") {
-
-        await supabaseClient.auth.signOut();
-
-        window.location.href =
-          "teacher-login.html";
-
-        return;
-
-      }
-
-
-      document.getElementById("teacherName").innerText =
-        user.user_metadata?.full_name ||
-        "Teacher";
-
-
-      document.getElementById("teacherEmail").innerText =
-        user.email || "";
-
+      return;
     }
 
+    const role =
+      user.user_metadata?.role;
 
-    // ==============================
-    // START LIVE
-    // ==============================
-
-    function startLive() {
-
-      const subject =
-        document.getElementById("subject").value;
-
-      const chapter =
-        document.getElementById("chapter").value;
-
-
-      document.getElementById("liveStatus").innerText =
-        "● LIVE — " +
-        subject +
-        " — অধ্যায় " +
-        chapter;
-
-
-      document
-        .getElementById("liveStatus")
-        .classList.add("live");
-
-
-      document.getElementById("startButton").disabled =
-        true;
-
-
-      document.getElementById("stopButton").disabled =
-        false;
-
-
-      document.getElementById("subject").disabled =
-        true;
-
-
-      document.getElementById("chapter").disabled =
-        true;
-
-
-      document.getElementById("message").style.color =
-        "green";
-
-
-      document.getElementById("message").innerText =
-        "Live Class চালু হয়েছে।";
-
-    }
-
-
-    // ==============================
-    // STOP LIVE
-    // ==============================
-
-    function stopLive() {
-
-      document.getElementById("liveStatus").innerText =
-        "● Live Class বন্ধ";
-
-
-      document
-        .getElementById("liveStatus")
-        .classList.remove("live");
-
-
-      document.getElementById("startButton").disabled =
-        false;
-
-
-      document.getElementById("stopButton").disabled =
-        true;
-
-
-      document.getElementById("subject").disabled =
-        false;
-
-
-      document.getElementById("chapter").disabled =
-        false;
-
-
-      document.getElementById("message").style.color =
-        "#555";
-
-
-      document.getElementById("message").innerText =
-        "Live Class বন্ধ হয়েছে।";
-
-    }
-
-
-    // ==============================
-    // LOGOUT
-    // ==============================
-
-    async function logout() {
+    if (role !== "teacher") {
 
       await supabaseClient.auth.signOut();
 
       window.location.href =
         "teacher-login.html";
 
+      return;
+    }
+
+    document.getElementById("teacherName")
+      .innerText =
+      user.user_metadata?.full_name ||
+      "Teacher";
+
+    document.getElementById("teacherEmail")
+      .innerText =
+      user.email || "";
+  }
+
+
+  /* =========================
+     SUBJECT DATA
+  ========================= */
+
+  const subjects = {
+
+    "8": [
+      "বাংলা",
+      "English",
+      "গণিত",
+      "বিজ্ঞান",
+      "বাংলাদেশ ও বিশ্বপরিচয়",
+      "তথ্য ও যোগাযোগ প্রযুক্তি"
+    ],
+
+    "9": {
+      "Science": [
+        "বাংলা",
+        "English",
+        "গণিত",
+        "পদার্থবিজ্ঞান",
+        "রসায়ন",
+        "জীববিজ্ঞান",
+        "উচ্চতর গণিত",
+        "বাংলাদেশ ও বিশ্বপরিচয়",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ],
+
+      "Arts": [
+        "বাংলা",
+        "English",
+        "গণিত",
+        "বাংলাদেশ ও বিশ্বপরিচয়",
+        "ভূগোল ও পরিবেশ",
+        "অর্থনীতি",
+        "পৌরনীতি ও নাগরিকতা",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ],
+
+      "Commerce": [
+        "বাংলা",
+        "English",
+        "গণিত",
+        "হিসাববিজ্ঞান",
+        "ফিন্যান্স ও ব্যাংকিং",
+        "ব্যবসায় উদ্যোগ",
+        "বাংলাদেশ ও বিশ্বপরিচয়",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ]
+    },
+
+    "10": {
+      "Science": [
+        "বাংলা",
+        "English",
+        "গণিত",
+        "পদার্থবিজ্ঞান",
+        "রসায়ন",
+        "জীববিজ্ঞান",
+        "উচ্চতর গণিত",
+        "বাংলাদেশ ও বিশ্বপরিচয়",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ],
+
+      "Arts": [
+        "বাংলা",
+        "English",
+        "গণিত",
+        "বাংলাদেশ ও বিশ্বপরিচয়",
+        "ভূগোল ও পরিবেশ",
+        "অর্থনীতি",
+        "পৌরনীতি ও নাগরিকতা",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ],
+
+      "Commerce": [
+        "বাংলা",
+        "English",
+        "গণিত",
+        "হিসাববিজ্ঞান",
+        "ফিন্যান্স ও ব্যাংকিং",
+        "ব্যবসায় উদ্যোগ",
+        "বাংলাদেশ ও বিশ্বপরিচয়",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ]
+    },
+
+    "11": {
+      "Science": [
+        "বাংলা",
+        "English",
+        "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "পদার্থবিজ্ঞান",
+        "রসায়ন",
+        "জীববিজ্ঞান",
+        "উচ্চতর গণিত"
+      ],
+
+      "Arts": [
+        "বাংলা",
+        "English",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ],
+
+      "Commerce": [
+        "বাংলা",
+        "English",
+        "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "হিসাববিজ্ঞান",
+        "ব্যবসায় সংগঠন ও ব্যবস্থাপনা",
+        "ফিন্যান্স, ব্যাংকিং ও বিমা"
+      ]
+    },
+
+    "12": {
+      "Science": [
+        "বাংলা",
+        "English",
+        "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "পদার্থবিজ্ঞান",
+        "রসায়ন",
+        "জীববিজ্ঞান",
+        "উচ্চতর গণিত"
+      ],
+
+      "Arts": [
+        "বাংলা",
+        "English",
+        "তথ্য ও যোগাযোগ প্রযুক্তি"
+      ],
+
+      "Commerce": [
+        "বাংলা",
+        "English",
+        "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "হিসাববিজ্ঞান",
+        "ব্যবসায় সংগঠন ও ব্যবস্থাপনা",
+        "ফিন্যান্স, ব্যাংকিং ও বিমা"
+      ]
+    }
+
+  };
+
+
+  /* =========================
+     CLASS CHANGED
+  ========================= */
+
+  function classChanged() {
+
+    const classValue =
+      document.getElementById("classSelect").value;
+
+    const groupBox =
+      document.getElementById("groupBox");
+
+    const groupSelect =
+      document.getElementById("groupSelect");
+
+    const subjectSelect =
+      document.getElementById("subjectSelect");
+
+    const chapterSelect =
+      document.getElementById("chapterSelect");
+
+    chapterSelect.innerHTML =
+      '<option value="">Select Chapter</option>';
+
+    chapterSelect.disabled = true;
+
+    subjectSelect.innerHTML =
+      '<option value="">Select Subject</option>';
+
+    subjectSelect.disabled = true;
+
+    document.getElementById("startButton")
+      .disabled = true;
+
+
+    if (!classValue) {
+
+      groupBox.style.display = "none";
+
+      return;
     }
 
 
-    // ==============================
-    // START PAGE
-    // ==============================
+    /* Class 8 */
+    if (classValue === "8") {
 
-    loadTeacher();
+      groupBox.style.display = "none";
 
-  </script>
+      loadSubjects(
+        subjects["8"]
+      );
+
+      return;
+    }
+
+
+    /* Class 9-12 */
+    groupBox.style.display = "block";
+
+    groupSelect.value = "";
+
+  }
+
+
+  /* =========================
+     GROUP CHANGED
+  ========================= */
+
+  function groupChanged() {
+
+    const classValue =
+      document.getElementById("classSelect").value;
+
+    const groupValue =
+      document.getElementById("groupSelect").value;
+
+    if (!groupValue) return;
+
+
+    loadSubjects(
+      subjects[classValue][groupValue]
+    );
+  }
+
+
+  /* =========================
+     LOAD SUBJECTS
+  ========================= */
+
+  function loadSubjects(subjectList) {
+
+    const subjectSelect =
+      document.getElementById("subjectSelect");
+
+    subjectSelect.innerHTML =
+      '<option value="">Select Subject</option>';
+
+
+    subjectList.forEach(function(subject) {
+
+      const option =
+        document.createElement("option");
+
+      option.value = subject;
+      option.textContent = subject;
+
+      subjectSelect.appendChild(option);
+
+    });
+
+
+    subjectSelect.disabled = false;
+
+  }
+
+
+  /* =========================
+     SUBJECT CHANGED
+  ========================= */
+
+  function subjectChanged() {
+
+    const classValue =
+      document.getElementById("classSelect").value;
+
+    const subjectValue =
+      document.getElementById("subjectSelect").value;
+
+    const chapterSelect =
+      document.getElementById("chapterSelect");
+
+
+    chapterSelect.innerHTML =
+      '<option value="">Select Chapter</option>';
+
+    document.getElementById("startButton")
+      .disabled = true;
+
+
+    if (!subjectValue) {
+
+      chapterSelect.disabled = true;
+
+      return;
+    }
+
+
+    /*
+      আপাতত Mathematics-এর
+      Class 8 chapter list দেওয়া হলো।
+      পরের ধাপে প্রতিটি Subject-এর
+      NCTB chapter list বসানো হবে।
+    */
+
+    if (
+      classValue === "8" &&
+      subjectValue === "গণিত"
+    ) {
+
+      const chapters = [
+
+        "অধ্যায় ১ — প্যাটার্ন",
+        "অধ্যায় ২ — মুনাফা",
+        "অধ্যায় ৩ — পরিমাপ",
+        "অধ্যায় ৪ — বীজগণিতীয় সূত্রাবলি ও প্রয়োগ",
+        "অধ্যায় ৫ — বীজগণিতীয় ভগ্নাংশ",
+        "অধ্যায় ৬ — সরল সহসমীকরণ",
+        "অধ্যায় ৭ — সেট",
+        "অধ্যায় ৮ — চতুর্ভুজ",
+        "অধ্যায় ৯ — পিথাগোরাসের উপপাদ্য",
+        "অধ্যায় ১০ — বৃত্ত",
+        "অধ্যায় ১১ — তথ্য ও উপাত্ত"
+
+      ];
+
+
+      chapters.forEach(function(chapter, index) {
+
+        const option =
+          document.createElement("option");
+
+        option.value = index + 1;
+
+        option.textContent = chapter;
+
+        chapterSelect.appendChild(option);
+
+      });
+
+
+      chapterSelect.disabled = false;
+
+      return;
+    }
+
+
+    /*
+      অন্য Subject-এর chapter
+      পরের ধাপে যোগ করা হবে।
+    */
+
+    const option =
+      document.createElement("option");
+
+    option.value = "1";
+
+    option.textContent =
+      "Chapter list পরবর্তী ধাপে যোগ করা হবে";
+
+    chapterSelect.appendChild(option);
+
+    chapterSelect.disabled = false;
+
+  }
+
+
+  /* =========================
+     START LIVE
+  ========================= */
+
+  function startLive() {
+
+    const classValue =
+      document.getElementById("classSelect").value;
+
+    const groupValue =
+      document.getElementById("groupSelect").value;
+
+    const subjectValue =
+      document.getElementById("subjectSelect").value;
+
+    const chapterValue =
+      document.getElementById("chapterSelect").value;
+
+
+    if (!classValue ||
+        !subjectValue ||
+        !chapterValue) {
+
+      document.getElementById("message")
+        .innerText =
+        "Class, Subject এবং Chapter নির্বাচন করুন।";
+
+      return;
+    }
+
+
+    let text =
+      "● LIVE — Class " +
+      classValue;
+
+
+    if (groupValue) {
+
+      text +=
+        " — " + groupValue;
+    }
+
+
+    text +=
+      " — " +
+      subjectValue +
+      " — Chapter " +
+      chapterValue;
+
+
+    document.getElementById("liveStatus")
+      .innerText = text;
+
+    document.getElementById("liveStatus")
+      .classList.add("live");
+
+
+    document.getElementById("startButton")
+      .disabled = true;
+
+    document.getElementById("stopButton")
+      .disabled = false;
+
+
+    document.getElementById("classSelect")
+      .disabled = true;
+
+    document.getElementById("groupSelect")
+      .disabled = true;
+
+    document.getElementById("subjectSelect")
+      .disabled = true;
+
+    document.getElementById("chapterSelect")
+      .disabled = true;
+
+
+    document.getElementById("message")
+      .style.color = "green";
+
+    document.getElementById("message")
+      .innerText =
+      "Live Class চালু হয়েছে।";
+
+  }
+
+
+  /* =========================
+     STOP LIVE
+  ========================= */
+
+  function stopLive() {
+
+    document.getElementById("liveStatus")
+      .innerText =
+      "● Live Class বন্ধ";
+
+    document.getElementById("liveStatus")
+      .classList.remove("live");
+
+
+    document.getElementById("startButton")
+      .disabled = false;
+
+    document.getElementById("stopButton")
+      .disabled = true;
+
+
+    document.getElementById("classSelect")
+      .disabled = false;
+
+    document.getElementById("groupSelect")
+      .disabled = false;
+
+    document.getElementById("subjectSelect")
+      .disabled = false;
+
+    document.getElementById("chapterSelect")
+      .disabled = false;
+
+
+    document.getElementById("message")
+      .style.color = "#555";
+
+    document.getElementById("message")
+      .innerText =
+      "Live Class বন্ধ হয়েছে।";
+
+  }
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+      "teacher-login.html";
+  }
+
+
+  /* =========================
+     START
+  ========================= */
+
+  loadTeacher();
+
+</script>
 
 </body>
-</html>
+        </html>
