@@ -2,14 +2,22 @@
 <html lang="bn">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Student Dashboard - Radiation</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  </script>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -24,7 +32,12 @@
     }
 
     header {
-      background: linear-gradient(135deg, #1565c0, #42a5f5);
+      background: linear-gradient(
+        135deg,
+        #1565c0,
+        #42a5f5
+      );
+
       color: white;
       padding: 25px 20px;
     }
@@ -48,7 +61,9 @@
       background: white;
       padding: 22px;
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      box-shadow:
+        0 4px 15px rgba(0,0,0,0.08);
+
       margin-bottom: 25px;
     }
 
@@ -69,7 +84,9 @@
 
     .subjects {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns:
+        repeat(auto-fit, minmax(200px, 1fr));
+
       gap: 18px;
     }
 
@@ -77,7 +94,9 @@
       background: white;
       padding: 25px 20px;
       border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      box-shadow:
+        0 4px 15px rgba(0,0,0,0.08);
+
       text-align: center;
       cursor: pointer;
       transition: 0.2s;
@@ -85,7 +104,6 @@
 
     .subject-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
     }
 
     .subject-card h3 {
@@ -128,423 +146,442 @@
       margin-top: 20px;
       color: #555;
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <!-- HEADER -->
 
-  <header>
+<header>
 
-    <h1>Radiation Student Dashboard</h1>
+  <h1>
+    Radiation Student Dashboard
+  </h1>
 
-    <p id="studentInfo">
-      Loading student information...
-    </p>
+  <p id="studentInfo">
+    Loading student information...
+  </p>
 
-  </header>
-
-
-  <!-- MAIN -->
-
-  <div class="container">
+</header>
 
 
-    <!-- WELCOME BOX -->
-
-    <div class="welcome">
-
-      <h2 id="welcomeText">
-        Welcome, Student!
-      </h2>
-
-      <p id="classText">
-        Class: Loading...
-      </p>
-
-      <p id="groupText">
-        Group: Loading...
-      </p>
-
-    </div>
+<div class="container">
 
 
-    <!-- SUBJECT TITLE -->
+  <div class="welcome">
 
-    <h2 class="subjects-title">
-      My Subjects
+    <h2 id="welcomeText">
+      Welcome, Student!
     </h2>
 
+    <p id="classText">
+      Class: Loading...
+    </p>
 
-    <!-- SUBJECTS -->
+    <p id="groupText">
+      Group: Loading...
+    </p>
 
-    <div class="subjects">
-
-
-      <!-- BANGLA -->
-
-      <div
-        class="subject-card"
-        onclick="openSubject('Bangla')"
-      >
-
-        <h3>Bangla</h3>
-
-        <p>
-          Notes, lessons and resources
-        </p>
-
-      </div>
+  </div>
 
 
-      <!-- ENGLISH -->
-
-      <div
-        class="subject-card"
-        onclick="openSubject('English')"
-      >
-
-        <h3>English</h3>
-
-        <p>
-          Notes, lessons and resources
-        </p>
-
-      </div>
+  <h2 class="subjects-title">
+    My Subjects
+  </h2>
 
 
-      <!-- MATHEMATICS -->
-
-      <div
-        class="subject-card"
-        onclick="openSubject('Mathematics')"
-      >
-
-        <h3>Mathematics</h3>
-
-        <p>
-          Notes, lessons and resources
-        </p>
-
-      </div>
+  <div class="subjects">
 
 
-      <!-- SCIENCE -->
+    <div
+      class="subject-card"
+      onclick="openSubject('Bangla')"
+    >
 
-      <div
-        class="subject-card"
-        onclick="openSubject('Science')"
-      >
+      <h3>Bangla</h3>
 
-        <h3>Science</h3>
-
-        <p>
-          Notes, lessons and resources
-        </p>
-
-      </div>
-
-
-      <!-- BGS -->
-
-      <div
-        class="subject-card"
-        onclick="openSubject('BGS')"
-      >
-
-        <h3>BGS</h3>
-
-        <p>
-          Notes, lessons and resources
-        </p>
-
-      </div>
-
-
-      <!-- ICT -->
-
-      <div
-        class="subject-card"
-        onclick="openSubject('ICT')"
-      >
-
-        <h3>ICT</h3>
-
-        <p>
-          Notes, lessons and resources
-        </p>
-
-      </div>
-
+      <p>
+        Notes, lessons and resources
+      </p>
 
     </div>
 
 
-    <!-- ACTION BUTTONS -->
+    <div
+      class="subject-card"
+      onclick="openSubject('English')"
+    >
 
-    <div class="actions">
+      <h3>English</h3>
 
-      <button
-        class="profile-btn"
-        onclick="showProfile()"
-      >
-        My Profile
-      </button>
-
-
-      <button
-        class="logout-btn"
-        onclick="logout()"
-      >
-        Logout
-      </button>
+      <p>
+        Notes, lessons and resources
+      </p>
 
     </div>
 
 
-    <p id="message"></p>
+    <div
+      class="subject-card"
+      onclick="openSubject('Mathematics')"
+    >
+
+      <h3>Mathematics</h3>
+
+      <p>
+        Notes, lessons and resources
+      </p>
+
+    </div>
+
+
+    <div
+      class="subject-card"
+      onclick="openSubject('Science')"
+    >
+
+      <h3>Science</h3>
+
+      <p>
+        Notes, lessons and resources
+      </p>
+
+    </div>
+
+
+    <div
+      class="subject-card"
+      onclick="openSubject('BGS')"
+    >
+
+      <h3>BGS</h3>
+
+      <p>
+        Notes, lessons and resources
+      </p>
+
+    </div>
+
+
+    <div
+      class="subject-card"
+      onclick="openSubject('ICT')"
+    >
+
+      <h3>ICT</h3>
+
+      <p>
+        Notes, lessons and resources
+      </p>
+
+    </div>
 
 
   </div>
 
 
-  <!-- JAVASCRIPT -->
+  <div class="actions">
 
-  <script>
-
-    // =====================================
-    // SUPABASE CONNECTION
-    // =====================================
-
-    const SUPABASE_URL =
-      "https://yzgydftfucahiorefgoc.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+    <button
+      class="profile-btn"
+      onclick="showProfile()"
+    >
+      My Profile
+    </button>
 
 
-    const supabaseClient =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+    <button
+      class="logout-btn"
+      onclick="logout()"
+    >
+      Logout
+    </button>
+
+  </div>
 
 
-    // =====================================
-    // LOAD STUDENT INFORMATION
-    // =====================================
-
-    async function loadStudent() {
-
-      try {
-
-        const result =
-          await supabaseClient.auth.getUser();
-
-        const user =
-          result.data.user;
+  <p id="message"></p>
 
 
-        // =====================================
-        // LOGIN CHECK
-        // =====================================
-
-        if (!user) {
-
-          window.location.href =
-            "student-login.html";
-
-          return;
-
-        }
+</div>
 
 
-        // =====================================
-        // STUDENT NAME
-        // =====================================
-
-        const userMetadata =
-          user.user_metadata || {};
+<script>
 
 
-        const name =
-          userMetadata.full_name ||
-          userMetadata.name ||
-          "Student";
+const SUPABASE_URL =
+  "https://yzgydftfucahiorefgoc.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-        // =====================================
-        // STUDENT CLASS
-        // =====================================
+/*
+=========================================
+LOAD STUDENT
+=========================================
+*/
 
-        const studentClass =
-          userMetadata.student_class ||
-          "Not selected";
+async function loadStudent() {
 
+  try {
 
-        // =====================================
-        // STUDENT GROUP
-        // =====================================
-
-        const studentGroup =
-          userMetadata.student_group ||
-          "";
-
-
-        // =====================================
-        // SHOW STUDENT NAME
-        // =====================================
-
-        document.getElementById(
-          "welcomeText"
-        ).textContent =
-          "Welcome, " + name + "!";
-
-
-        // =====================================
-        // SHOW EMAIL
-        // =====================================
-
-        document.getElementById(
-          "studentInfo"
-        ).textContent =
-          "Email: " + (user.email || "");
-
-
-        // =====================================
-        // SHOW CLASS
-        // =====================================
-
-        document.getElementById(
-          "classText"
-        ).textContent =
-          "Class: " + studentClass;
-
-
-        // =====================================
-        // SHOW GROUP
-        // =====================================
-
-        if (
-          studentClass === "8" ||
-          studentClass === "Class 8"
-        ) {
-
-          document.getElementById(
-            "groupText"
-          ).textContent =
-            "Group: Not applicable";
-
-        }
-
-        else if (studentGroup) {
-
-          document.getElementById(
-            "groupText"
-          ).textContent =
-            "Group: " + studentGroup;
-
-        }
-
-        else {
-
-          document.getElementById(
-            "groupText"
-          ).textContent =
-            "Group: Not selected";
-
-        }
-
+    const {
+      data: {
+        user
       }
+    } =
+      await supabaseClient.auth.getUser();
 
-      catch (error) {
 
-        console.error(
-          "Student loading error:",
-          error
-        );
+    if (!user) {
 
-        document.getElementById(
-          "welcomeText"
-        ).textContent =
-          "Welcome, Student!";
+      window.location.href =
+        "student-login.html";
 
-        document.getElementById(
-          "classText"
-        ).textContent =
-          "Class: Unable to load";
-
-        document.getElementById(
-          "groupText"
-        ).textContent =
-          "Group: Unable to load";
-
-      }
+      return;
 
     }
 
 
-    // =====================================
-    // OPEN SUBJECT
-    // =====================================
+    /*
+    =====================================
+    LOAD PROFILE
+    =====================================
+    */
 
-    function openSubject(subject) {
-
-      if (subject === "Mathematics") {
-
-        window.location.href =
-          "mathematics.html";
-
-        return;
-
-      }
-
-
-      document.getElementById(
-        "message"
-      ).textContent =
-        subject +
-        " page will be added next.";
-
-    }
+    const {
+      data: profile,
+      error
+    } =
+      await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
 
 
-    // =====================================
-    // PROFILE
-    // =====================================
-
-    function showProfile() {
-
-      document.getElementById(
-        "message"
-      ).textContent =
-        "Profile page will be added next.";
-
-    }
-
-
-    // =====================================
-    // LOGOUT
-    // =====================================
-
-    async function logout() {
+    if (error || !profile) {
 
       await supabaseClient.auth.signOut();
 
       window.location.href =
         "student-login.html";
 
+      return;
+
     }
 
 
-    // =====================================
-    // START
-    // =====================================
+    /*
+    =====================================
+    CHECK ROLE
+    =====================================
+    */
 
-    loadStudent();
+    if (profile.role !== "student") {
 
-  </script>
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "student-login.html";
+
+      return;
+
+    }
+
+
+    /*
+    =====================================
+    CHECK BLOCK
+    =====================================
+    */
+
+    if (profile.is_active === false) {
+
+      await supabaseClient.auth.signOut();
+
+      alert(
+        "Your Student account has been blocked by the Owner."
+      );
+
+      window.location.href =
+        "student-login.html";
+
+      return;
+
+    }
+
+
+    /*
+    =====================================
+    STUDENT INFORMATION
+    =====================================
+    */
+
+    const name =
+      profile.full_name ||
+      "Student";
+
+
+    const studentClass =
+      profile.student_class ||
+      "Not selected";
+
+
+    const studentGroup =
+      profile.student_group ||
+      "";
+
+
+    /*
+    =====================================
+    SHOW INFORMATION
+    =====================================
+    */
+
+    document.getElementById(
+      "welcomeText"
+    ).textContent =
+      "Welcome, " + name + "!";
+
+
+    document.getElementById(
+      "studentInfo"
+    ).textContent =
+      "Email: " + (profile.email || user.email || "");
+
+
+    document.getElementById(
+      "classText"
+    ).textContent =
+      "Class: " + studentClass;
+
+
+    if (
+      studentClass === "8" ||
+      studentClass === "Class 8"
+    ) {
+
+      document.getElementById(
+        "groupText"
+      ).textContent =
+        "Group: Not applicable";
+
+    }
+
+    else if (studentGroup) {
+
+      document.getElementById(
+        "groupText"
+      ).textContent =
+        "Group: " + studentGroup;
+
+    }
+
+    else {
+
+      document.getElementById(
+        "groupText"
+      ).textContent =
+        "Group: Not selected";
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+      "student-login.html";
+
+  }
+
+}
+
+
+/*
+=========================================
+OPEN SUBJECT
+=========================================
+*/
+
+function openSubject(subject) {
+
+  if (subject === "Mathematics") {
+
+    window.location.href =
+      "mathematics.html";
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "message"
+  ).textContent =
+    subject +
+    " page will be added next.";
+
+}
+
+
+/*
+=========================================
+PROFILE
+=========================================
+*/
+
+function showProfile() {
+
+  document.getElementById(
+    "message"
+  ).textContent =
+    "Profile page will be added next.";
+
+}
+
+
+/*
+=========================================
+LOGOUT
+=========================================
+*/
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  window.location.href =
+    "student-login.html";
+
+}
+
+
+/*
+=========================================
+START
+=========================================
+*/
+
+loadStudent();
+
+</script>
+
 
 </body>
 
