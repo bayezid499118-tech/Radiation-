@@ -206,15 +206,15 @@
       </select>
 
 
-      <!-- Meet Link -->
+      <!-- Google Meet -->
       <label for="meetLink">
         Google Meet Link
       </label>
 
       <input
-        type="url"
+        type="text"
         id="meetLink"
-        placeholder="https://meet.google.com/..."
+        placeholder="meet.google.com/xxx-xxxx-xxx"
         disabled
       >
 
@@ -229,7 +229,7 @@
       </div>
 
 
-      <!-- Buttons -->
+      <!-- Start -->
       <button
         class="start-btn"
         id="startButton"
@@ -238,6 +238,8 @@
         Start Live Class
       </button>
 
+
+      <!-- Stop -->
       <button
         class="stop-btn"
         id="stopButton"
@@ -245,6 +247,7 @@
         disabled>
         Stop Live Class
       </button>
+
 
       <div class="message" id="message"></div>
 
@@ -285,7 +288,7 @@
 
 
   /* =========================
-     CURRENT TEACHER
+     TEACHER
   ========================= */
 
   let currentTeacher = null;
@@ -305,8 +308,10 @@
       return;
     }
 
+
     const role =
       user.user_metadata?.role;
+
 
     if (role !== "teacher") {
 
@@ -318,36 +323,45 @@
       return;
     }
 
+
     currentTeacher = user;
+
 
     document.getElementById("teacherName")
       .innerText =
       user.user_metadata?.full_name ||
       "Teacher";
 
+
     document.getElementById("teacherEmail")
       .innerText =
       user.email || "";
+
   }
 
 
   /* =========================
-     SUBJECT DATA
+     SUBJECTS
   ========================= */
 
   const subjects = {
 
     "8": [
+
       "বাংলা",
       "English",
       "গণিত",
       "বিজ্ঞান",
       "বাংলাদেশ ও বিশ্বপরিচয়",
       "তথ্য ও যোগাযোগ প্রযুক্তি"
+
     ],
 
+
     "9": {
+
       "Science": [
+
         "বাংলা",
         "English",
         "গণিত",
@@ -357,9 +371,11 @@
         "উচ্চতর গণিত",
         "বাংলাদেশ ও বিশ্বপরিচয়",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ],
 
       "Arts": [
+
         "বাংলা",
         "English",
         "গণিত",
@@ -368,9 +384,11 @@
         "অর্থনীতি",
         "পৌরনীতি ও নাগরিকতা",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ],
 
       "Commerce": [
+
         "বাংলা",
         "English",
         "গণিত",
@@ -379,11 +397,16 @@
         "ব্যবসায় উদ্যোগ",
         "বাংলাদেশ ও বিশ্বপরিচয়",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ]
+
     },
+
 
     "10": {
+
       "Science": [
+
         "বাংলা",
         "English",
         "গণিত",
@@ -393,9 +416,11 @@
         "উচ্চতর গণিত",
         "বাংলাদেশ ও বিশ্বপরিচয়",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ],
 
       "Arts": [
+
         "বাংলা",
         "English",
         "গণিত",
@@ -404,9 +429,11 @@
         "অর্থনীতি",
         "পৌরনীতি ও নাগরিকতা",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ],
 
       "Commerce": [
+
         "বাংলা",
         "English",
         "গণিত",
@@ -415,11 +442,16 @@
         "ব্যবসায় উদ্যোগ",
         "বাংলাদেশ ও বিশ্বপরিচয়",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ]
+
     },
+
 
     "11": {
+
       "Science": [
+
         "বাংলা",
         "English",
         "তথ্য ও যোগাযোগ প্রযুক্তি",
@@ -427,26 +459,35 @@
         "রসায়ন",
         "জীববিজ্ঞান",
         "উচ্চতর গণিত"
+
       ],
 
       "Arts": [
+
         "বাংলা",
         "English",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ],
 
       "Commerce": [
+
         "বাংলা",
         "English",
         "তথ্য ও যোগাযোগ প্রযুক্তি",
         "হিসাববিজ্ঞান",
         "ব্যবসায় সংগঠন ও ব্যবস্থাপনা",
         "ফিন্যান্স, ব্যাংকিং ও বিমা"
+
       ]
+
     },
 
+
     "12": {
+
       "Science": [
+
         "বাংলা",
         "English",
         "তথ্য ও যোগাযোগ প্রযুক্তি",
@@ -454,22 +495,28 @@
         "রসায়ন",
         "জীববিজ্ঞান",
         "উচ্চতর গণিত"
+
       ],
 
       "Arts": [
+
         "বাংলা",
         "English",
         "তথ্য ও যোগাযোগ প্রযুক্তি"
+
       ],
 
       "Commerce": [
+
         "বাংলা",
         "English",
         "তথ্য ও যোগাযোগ প্রযুক্তি",
         "হিসাববিজ্ঞান",
         "ব্যবসায় সংগঠন ও ব্যবস্থাপনা",
         "ফিন্যান্স, ব্যাংকিং ও বিমা"
+
       ]
+
     }
 
   };
@@ -477,6 +524,7 @@
 
   /* =========================
      CLASS 8 MATHEMATICS
+     CHAPTERS
   ========================= */
 
   const class8MathChapters = [
@@ -531,9 +579,13 @@
 
     meetLink.value = "";
 
+
     subjectSelect.disabled = true;
+
     chapterSelect.disabled = true;
+
     meetLink.disabled = true;
+
 
     document.getElementById("startButton")
       .disabled = true;
@@ -541,15 +593,19 @@
 
     if (!classValue) {
 
-      groupBox.style.display = "none";
+      groupBox.style.display =
+        "none";
 
       return;
     }
 
 
+    /* Class 8 */
+
     if (classValue === "8") {
 
-      groupBox.style.display = "none";
+      groupBox.style.display =
+        "none";
 
       loadSubjects(
         subjects["8"]
@@ -559,7 +615,10 @@
     }
 
 
-    groupBox.style.display = "block";
+    /* Class 9-12 */
+
+    groupBox.style.display =
+      "block";
 
   }
 
@@ -596,22 +655,25 @@
     const subjectSelect =
       document.getElementById("subjectSelect");
 
+
     subjectSelect.innerHTML =
       '<option value="">Select Subject</option>';
 
 
-    subjectList.forEach(function(subject) {
+    subjectList.forEach(
+      function(subject) {
 
-      const option =
-        document.createElement("option");
+        const option =
+          document.createElement("option");
 
-      option.value = subject;
+        option.value = subject;
 
-      option.textContent = subject;
+        option.textContent = subject;
 
-      subjectSelect.appendChild(option);
+        subjectSelect.appendChild(option);
 
-    });
+      }
+    );
 
 
     subjectSelect.disabled = false;
@@ -645,22 +707,21 @@
 
     meetLink.disabled = true;
 
+
     document.getElementById("startButton")
       .disabled = true;
 
 
     if (!subjectValue) {
 
-      chapterSelect.disabled = true;
+      chapterSelect.disabled =
+        true;
 
       return;
     }
 
 
-    /*
-      বর্তমানে Class 8 Mathematics
-      chapter list যুক্ত করা হয়েছে।
-    */
+    /* Class 8 Mathematics */
 
     if (
       classValue === "8" &&
@@ -673,25 +734,28 @@
           const option =
             document.createElement("option");
 
-          option.value = index + 1;
+          option.value =
+            index + 1;
 
-          option.textContent = chapter;
+          option.textContent =
+            chapter;
 
-          chapterSelect.appendChild(option);
+          chapterSelect.appendChild(
+            option
+          );
 
         }
       );
 
-      chapterSelect.disabled = false;
+
+      chapterSelect.disabled =
+        false;
 
       return;
     }
 
 
-    /*
-      অন্য Subject-এর chapter list
-      পরবর্তী ধাপে যুক্ত হবে।
-    */
+    /* Other subjects */
 
     const option =
       document.createElement("option");
@@ -701,9 +765,13 @@
     option.textContent =
       "Chapter list পরবর্তী ধাপে যোগ করা হবে";
 
-    chapterSelect.appendChild(option);
+    chapterSelect.appendChild(
+      option
+    );
 
-    chapterSelect.disabled = false;
+
+    chapterSelect.disabled =
+      false;
 
   }
 
@@ -720,9 +788,11 @@
     const meetLink =
       document.getElementById("meetLink");
 
+
     if (!chapterValue) {
 
-      meetLink.disabled = true;
+      meetLink.disabled =
+        true;
 
       document.getElementById("startButton")
         .disabled = true;
@@ -731,7 +801,9 @@
     }
 
 
-    meetLink.disabled = false;
+    meetLink.disabled =
+      false;
+
 
     checkReady();
 
@@ -754,7 +826,8 @@
       document.getElementById("chapterSelect").value;
 
     const meetValue =
-      document.getElementById("meetLink").value.trim();
+      document.getElementById("meetLink")
+        .value.trim();
 
 
     const ready =
@@ -771,7 +844,7 @@
 
 
   /* =========================
-     MEET INPUT
+     MEET LINK INPUT
   ========================= */
 
   document
@@ -802,7 +875,8 @@
       document.getElementById("classSelect").value;
 
     const groupValue =
-      document.getElementById("groupSelect").value || null;
+      document.getElementById("groupSelect").value ||
+      null;
 
     const subjectValue =
       document.getElementById("subjectSelect").value;
@@ -811,7 +885,8 @@
       document.getElementById("chapterSelect").value;
 
     const meetValue =
-      document.getElementById("meetLink").value.trim();
+      document.getElementById("meetLink")
+        .value.trim();
 
 
     if (
@@ -829,11 +904,37 @@
     }
 
 
-    /* Google Meet link check */
+    /* =========================
+       ADD HTTPS AUTOMATICALLY
+    ========================= */
+
+    let finalMeetLink =
+      meetValue;
+
 
     if (
-      !meetValue.startsWith("https://meet.google.com/")
+      !finalMeetLink.startsWith("http://") &&
+      !finalMeetLink.startsWith("https://")
     ) {
+
+      finalMeetLink =
+        "https://" + finalMeetLink;
+
+    }
+
+
+    /* =========================
+       CHECK GOOGLE MEET LINK
+    ========================= */
+
+    if (
+      !finalMeetLink.startsWith(
+        "https://meet.google.com/"
+      )
+    ) {
+
+      document.getElementById("message")
+        .style.color = "#b91c1c";
 
       document.getElementById("message")
         .innerText =
@@ -855,35 +956,51 @@
       "Live Class সংরক্ষণ করা হচ্ছে...";
 
 
-    /* Save to Supabase */
+    /* =========================
+       SAVE TO SUPABASE
+    ========================= */
 
-    const { data, error } =
+    const {
+      data,
+      error
+    } =
       await supabaseClient
         .from("live_classes")
         .insert({
 
-          class_name: classValue,
+          class_name:
+            classValue,
 
-          group_name: groupValue,
+          group_name:
+            groupValue,
 
-          subject: subjectValue,
+          subject:
+            subjectValue,
 
-          chapter: Number(chapterValue),
+          chapter:
+            Number(chapterValue),
 
-          meet_link: meetValue,
+          meet_link:
+            finalMeetLink,
 
-          teacher_id: currentTeacher.id
+          teacher_id:
+            currentTeacher.id
 
         })
         .select();
 
+
+    /* =========================
+       ERROR
+    ========================= */
 
     if (error) {
 
       console.error(error);
 
       document.getElementById("message")
-        .style.color = "#b91c1c";
+        .style.color =
+        "#b91c1c";
 
       document.getElementById("message")
         .innerText =
@@ -896,7 +1013,9 @@
     }
 
 
-    /* Show LIVE */
+    /* =========================
+       LIVE STATUS
+    ========================= */
 
     let statusText =
       "● LIVE — Class " +
@@ -906,7 +1025,8 @@
     if (groupValue) {
 
       statusText +=
-        " — " + groupValue;
+        " — " +
+        groupValue;
 
     }
 
@@ -921,6 +1041,7 @@
     document.getElementById("liveStatus")
       .innerText =
       statusText;
+
 
     document.getElementById("liveStatus")
       .classList.add("live");
@@ -947,7 +1068,8 @@
 
 
     document.getElementById("message")
-      .style.color = "green";
+      .style.color =
+      "green";
 
     document.getElementById("message")
       .innerText =
@@ -966,12 +1088,14 @@
       .innerText =
       "● Live Class বন্ধ";
 
+
     document.getElementById("liveStatus")
       .classList.remove("live");
 
 
     document.getElementById("startButton")
       .disabled = false;
+
 
     document.getElementById("stopButton")
       .disabled = true;
@@ -994,7 +1118,8 @@
 
 
     document.getElementById("message")
-      .style.color = "#555";
+      .style.color =
+      "#555";
 
     document.getElementById("message")
       .innerText =
