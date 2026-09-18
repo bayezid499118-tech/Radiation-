@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Owner Dashboard - Radiation</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #6a1b9a;
+      color: white;
+      padding: 22px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .welcome {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .welcome h2 {
+      color: #6a1b9a;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #666;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px 18px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .card .icon {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: #6a1b9a;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      border: none;
+      background: #6a1b9a;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      background: #4a148c;
+    }
+
+    .logout {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 30px auto 0;
+      background: #c62828;
+      text-align: center;
+    }
+
+    .logout:hover {
+      background: #8e0000;
+    }
+
+    footer {
+      margin-top: 30px;
+      background: #123;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>👑 Radiation Owner Panel</h1>
+    <p>Complete Control Center</p>
+  </header>
+
+
+  <div class="container">
+
+    <div class="welcome">
+      <h2>স্বাগতম, Owner</h2>
+      <p>
+        এখান থেকে Radiation-এর Student, Teacher, Course,
+        Live Class এবং অন্যান্য শিক্ষা কার্যক্রম পরিচালনা করা যাবে।
+      </p>
+    </div>
+
+
+    <h2 class="section-title">
+      Owner Controls
+    </h2>
+
+
+    <div class="cards">
+
+      <!-- STUDENTS -->
+      <div class="card">
+
+        <div class="icon">👨‍🎓</div>
+
+        <h3>Students</h3>
+
+        <p>
+          Student account এবং শিক্ষার্থীদের
+          পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="studentsControl()">
+          Manage Students
+        </button>
+
+      </div>
+
+
+      <!-- TEACHERS -->
+      <div class="card">
+
+        <div class="icon">👨‍🏫</div>
+
+        <h3>Teachers</h3>
+
+        <p>
+          Teacher account এবং শিক্ষক অনুমোদন
+          পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="teachersControl()">
+          Manage Teachers
+        </button>
+
+      </div>
+
+
+      <!-- COURSES -->
+      <div class="card">
+
+        <div class="icon">📚</div>
+
+        <h3>Courses</h3>
+
+        <p>
+          Class, Subject এবং Course
+          পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="coursesControl()">
+          Manage Courses
+        </button>
+
+      </div>
+
+
+      <!-- LIVE CLASS -->
+      <div class="card">
+
+        <div class="icon">🎥</div>
+
+        <h3>Live Classes</h3>
+
+        <p>
+          Live Class এবং Live Session
+          পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="liveControl()">
+          Manage Live
+        </button>
+
+      </div>
+
+
+      <!-- RECORDED -->
+      <div class="card">
+
+        <div class="icon">▶️</div>
+
+        <h3>Recorded Classes</h3>
+
+        <p>
+          Recorded Class এবং ভিডিও
+          পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="recordedControl()">
+          Manage Recordings
+        </button>
+
+      </div>
+
+
+      <!-- PDF -->
+      <div class="card">
+
+        <div class="icon">📄</div>
+
+        <h3>Class Slides</h3>
+
+        <p>
+          Class Slides এবং PDF
+          পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="pdfControl()">
+          Manage Slides
+        </button>
+
+      </div>
+
+
+      <!-- EXAM -->
+      <div class="card">
+
+        <div class="icon">📝</div>
+
+        <h3>Online Exams</h3>
+
+        <p>
+          Online Exam এবং পরীক্ষার
+          ফলাফল পরিচালনা করুন।
+        </p>
+
+        <button class="btn" onclick="examControl()">
+          Manage Exams
+        </button>
+
+      </div>
+
+
+      <!-- PROGRESS -->
+      <div class="card">
+
+        <div class="icon">📊</div>
+
+        <h3>Student Progress</h3>
+
+        <p>
+          শিক্ষার্থীদের অগ্রগতি এবং
+          ফলাফল দেখুন।
+        </p>
+
+        <button class="btn" onclick="progressControl()">
+          View Progress
+        </button>
+
+      </div>
+
+
+      <!-- ACCESS -->
+      <div class="card">
+
+        <div class="icon">🔐</div>
+
+        <h3>Access Control</h3>
+
+        <p>
+          কে কোন Course বা Content
+          ব্যবহার করতে পারবে তা নিয়ন্ত্রণ করুন।
+        </p>
+
+        <button class="btn" onclick="accessControl()">
+          Manage Access
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="btn logout"
+      onclick="logout()"
+    >
+      Logout
+    </button>
+
+  </div>
+
+
+  <footer>
+    <p>
+      © 2026 Radiation | Owner Control Panel
+    </p>
+  </footer>
+
+
+<script>
+
+  /* =========================
+     SUPABASE
+  ========================= */
+
+  const SUPABASE_URL =
+    "https://yzgydftfucahiorefgoc.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  /* =========================
+     OWNER SECURITY CHECK
+  ========================= */
+
+  async function checkOwner() {
+
+    const {
+      data: { user },
+      error
+    } = await supabaseClient.auth.getUser();
+
+
+    if (error || !user) {
+
+      window.location.href =
+        "owner-login.html";
+
+      return;
+    }
+
+
+    const role =
+      user.user_metadata?.role;
+
+
+    if (role !== "owner") {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "owner-login.html";
+
+      return;
+    }
+
+  }
+
+
+  /* =========================
+     CONTROL BUTTONS
+  ========================= */
+
+  function studentsControl() {
+    alert("Student Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function teachersControl() {
+    alert("Teacher Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function coursesControl() {
+    alert("Course Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function liveControl() {
+    alert("Live Class Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function recordedControl() {
+    alert("Recorded Class Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function pdfControl() {
+    alert("Class Slides Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function examControl() {
+    alert("Online Exam Management পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function progressControl() {
+    alert("Student Progress পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+  function accessControl() {
+    alert("Access Control পরবর্তী ধাপে তৈরি হবে।");
+  }
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+      "owner-login.html";
+
+  }
+
+
+  /* =========================
+     START
+  ========================= */
+
+  checkOwner();
+
+</script>
+
+</body>
+  </html>
