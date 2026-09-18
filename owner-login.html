@@ -1,104 +1,257 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Radiation - Owner Dashboard</title>
+
+  <title>Owner Login - Radiation</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      background: #f2f5f9;
     }
 
-    header {
-      background: #2563eb;
-      color: white;
-      padding: 20px;
+    body {
+      min-height: 100vh;
+      background: #f4f7fb;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      padding: 35px 25px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+    }
+
+    h1 {
+      text-align: center;
+      color: #6a1b9a;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
     }
 
     button {
-      padding: 10px 18px;
+      width: 100%;
+      padding: 14px;
       border: none;
       border-radius: 8px;
+      background: #6a1b9a;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
     }
 
-    .logout {
-      background: white;
-      color: #2563eb;
+    button:hover {
+      background: #4a148c;
     }
 
-    .content {
-      padding: 25px;
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #1565c0;
+      text-decoration: none;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <strong>Radiation Owner Dashboard</strong>
-    <button class="logout" id="logoutBtn">Logout</button>
-  </header>
+  <div class="login-box">
 
-  <div class="content">
-    <h2>Welcome, Owner</h2>
-    <p>এখান থেকে Radiation ওয়েব অ্যাপ পরিচালনা করা যাবে।</p>
+    <h1>👑 Owner Login</h1>
+
+    <p class="subtitle">
+      Radiation Control Panel
+    </p>
+
+    <form id="ownerLoginForm">
+
+      <label for="password">
+        Owner Password
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password দিন"
+        autocomplete="current-password"
+        required
+      >
+
+      <button type="submit">
+        Owner Login
+      </button>
+
+    </form>
+
+    <div id="message"></div>
+
+    <a href="index.html" class="back">
+      ← Home Page
+    </a>
+
   </div>
 
 
-  <script type="module">
+<script>
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  /* =========================
+     SUPABASE
+  ========================= */
 
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    }
-      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  const SUPABASE_URL =
+    "https://yzgydftfucahiorefgoc.supabase.co";
 
+  const SUPABASE_KEY =
+    "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  /* =========================
+     FIXED OWNER ACCOUNT
+     ========================= */
+
+  const OWNER_EMAIL =
+    "bayezid123215@gmail.com";
 
 
-    // Login না থাকলে আবার Owner Login-এ পাঠাবে
-    onAuthStateChanged(auth, (user) => {
+  /* =========================
+     OWNER LOGIN
+  ========================= */
 
-      if (!user || user.email.toLowerCase() !== "bayezid7131@gmail.com") {
-        window.location.href = "owner-login.html";
+  document
+    .getElementById("ownerLoginForm")
+    .addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+      const password =
+        document
+          .getElementById("password")
+          .value;
+
+      const message =
+        document
+          .getElementById("message");
+
+      message.style.color = "#555";
+      message.innerText =
+        "Owner Login হচ্ছে...";
+
+
+      /* Login with fixed Owner email */
+
+      const {
+        data,
+        error
+      } = await supabaseClient.auth
+        .signInWithPassword({
+
+          email: OWNER_EMAIL,
+
+          password: password
+
+        });
+
+
+      /* Wrong password / login error */
+
+      if (error) {
+
+        message.style.color = "#c62828";
+
+        message.innerText =
+          "Password সঠিক নয়।";
+
+        return;
       }
 
+
+      const user = data.user;
+
+
+      /* Check Owner role */
+
+      const role =
+        user.user_metadata?.role;
+
+
+      if (role !== "owner") {
+
+        await supabaseClient.auth.signOut();
+
+        message.style.color = "#c62828";
+
+        message.innerText =
+          "এই Account Owner Account নয়।";
+
+        return;
+      }
+
+
+      /* Successful login */
+
+      message.style.color = "#2e7d32";
+
+      message.innerText =
+        "Owner Login সফল হয়েছে।";
+
+
+      setTimeout(function() {
+
+        window.location.href =
+          "owner-dashboard.html";
+
+      }, 700);
+
     });
 
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-
-      await signOut(auth);
-
-      window.location.href = "owner-login.html";
-
-    });
-
-  </script>
+</script>
 
 </body>
 </html>
