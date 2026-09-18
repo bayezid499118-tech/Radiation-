@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Teacher Login - Radiation</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 28px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+      color: #111827;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin: 8px 0 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #9ca3af;
+    }
+
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .signup-link a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="box">
+
+      <h1>Radiation</h1>
+
+      <div class="subtitle">
+        Teacher Login
+      </div>
+
+      <form id="loginForm">
+
+        <label>Email</label>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="আপনার Email"
+          required
+        >
+
+        <label>Password</label>
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+        >
+
+        <button
+          type="submit"
+          id="loginButton"
+        >
+          Teacher Login
+        </button>
+
+      </form>
+
+      <div
+        class="message"
+        id="message"
+      ></div>
+
+      <div class="signup-link">
+
+        Don't have an account?
+
+        <a href="teacher-signup.html">
+          Teacher Sign Up
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://yzgydftfucahiorefgoc.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    document
+      .getElementById("loginForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          const email =
+            document
+              .getElementById("email")
+              .value
+              .trim();
+
+
+          const password =
+            document
+              .getElementById("password")
+              .value;
+
+
+          const message =
+            document
+              .getElementById("message");
+
+
+          const button =
+            document
+              .getElementById("loginButton");
+
+
+          button.disabled = true;
+
+          button.innerText =
+            "Logging in...";
+
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient.auth.signInWithPassword({
+
+              email: email,
+
+              password: password
+
+            });
+
+
+          if (error) {
+
+            message.style.color = "red";
+
+            message.innerText =
+              error.message;
+
+            button.disabled = false;
+
+            button.innerText =
+              "Teacher Login";
+
+            return;
+
+          }
+
+
+          // Teacher account কিনা যাচাই
+
+          const role =
+            data.user?.user_metadata?.role;
+
+
+          if (role !== "teacher") {
+
+            await supabaseClient.auth.signOut();
+
+            message.style.color = "red";
+
+            message.innerText =
+              "এই Accountটি Teacher Account নয়।";
+
+            button.disabled = false;
+
+            button.innerText =
+              "Teacher Login";
+
+            return;
+
+          }
+
+
+          message.style.color = "green";
+
+          message.innerText =
+            "Login সফল হয়েছে।";
+
+
+          setTimeout(function() {
+
+            window.location.href =
+              "teacher-dashboard.html";
+
+          }, 700);
+
+        }
+      );
+
+  </script>
+
+</body>
+</html>
