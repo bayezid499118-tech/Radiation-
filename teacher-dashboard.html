@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard - Radiation</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #111827;
+      color: white;
+      text-align: center;
+      padding: 22px 15px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .header p {
+      margin: 7px 0 0;
+      color: #d1d5db;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+
+    .live-status {
+      padding: 14px;
+      border-radius: 10px;
+      background: #f3f4f6;
+      text-align: center;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    .live {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      margin-top: 15px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .start-btn {
+      background: #16a34a;
+    }
+
+    .stop-btn {
+      background: #dc2626;
+    }
+
+    .logout-btn {
+      background: #374151;
+    }
+
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .teacher-name {
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>Radiation</h1>
+    <p>Teacher Dashboard</p>
+  </div>
+
+  <div class="container">
+
+    <!-- Teacher Information -->
+    <div class="card">
+      <h2>Teacher Information</h2>
+
+      <div class="teacher-name">
+        Teacher: <strong id="teacherName">Loading...</strong>
+      </div>
+
+      <div>
+        Email: <span id="teacherEmail">Loading...</span>
+      </div>
+    </div>
+
+
+    <!-- Live Class -->
+    <div class="card">
+
+      <h2>Start Live Class</h2>
+
+      <label for="subject">
+        Subject
+      </label>
+
+      <select id="subject">
+        <option value="Mathematics">
+          Mathematics
+        </option>
+      </select>
+
+
+      <label for="chapter">
+        Chapter
+      </label>
+
+      <select id="chapter">
+
+        <option value="1">
+          অধ্যায় ১ — প্যাটার্ন
+        </option>
+
+        <option value="2">
+          অধ্যায় ২ — মুনাফা
+        </option>
+
+        <option value="3">
+          অধ্যায় ৩ — পরিমাপ
+        </option>
+
+        <option value="4">
+          অধ্যায় ৪ — বীজগণিতীয় সূত্রাবলি ও প্রয়োগ
+        </option>
+
+        <option value="5">
+          অধ্যায় ৫ — বীজগণিতীয় ভগ্নাংশ
+        </option>
+
+        <option value="6">
+          অধ্যায় ৬ — সরল সহসমীকরণ
+        </option>
+
+        <option value="7">
+          অধ্যায় ৭ — সেট
+        </option>
+
+        <option value="8">
+          অধ্যায় ৮ — চতুর্ভুজ
+        </option>
+
+        <option value="9">
+          অধ্যায় ৯ — পিথাগোরাসের উপপাদ্য
+        </option>
+
+        <option value="10">
+          অধ্যায় ১০ — বৃত্ত
+        </option>
+
+        <option value="11">
+          অধ্যায় ১১ — তথ্য ও উপাত্ত
+        </option>
+
+      </select>
+
+
+      <div
+        class="live-status"
+        id="liveStatus"
+      >
+        ● Live Class বন্ধ
+      </div>
+
+
+      <button
+        class="start-btn"
+        id="startButton"
+        onclick="startLive()"
+      >
+        Start Live Class
+      </button>
+
+
+      <button
+        class="stop-btn"
+        id="stopButton"
+        onclick="stopLive()"
+        disabled
+      >
+        Stop Live Class
+      </button>
+
+
+      <div
+        class="message"
+        id="message"
+      ></div>
+
+    </div>
+
+
+    <!-- Logout -->
+    <div class="card">
+
+      <button
+        class="logout-btn"
+        onclick="logout()"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // ==============================
+    // SUPABASE
+    // ==============================
+
+    const SUPABASE_URL =
+      "https://yzgydftfucahiorefgoc.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    // ==============================
+    // TEACHER LOGIN CHECK
+    // ==============================
+
+    async function loadTeacher() {
+
+      const {
+        data: {
+          user
+        }
+      } = await supabaseClient.auth.getUser();
+
+
+      if (!user) {
+
+        window.location.href =
+          "teacher-login.html";
+
+        return;
+
+      }
+
+
+      const role =
+        user.user_metadata?.role;
+
+
+      if (role !== "teacher") {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href =
+          "teacher-login.html";
+
+        return;
+
+      }
+
+
+      document.getElementById("teacherName").innerText =
+        user.user_metadata?.full_name ||
+        "Teacher";
+
+
+      document.getElementById("teacherEmail").innerText =
+        user.email || "";
+
+    }
+
+
+    // ==============================
+    // START LIVE
+    // ==============================
+
+    function startLive() {
+
+      const subject =
+        document.getElementById("subject").value;
+
+      const chapter =
+        document.getElementById("chapter").value;
+
+
+      document.getElementById("liveStatus").innerText =
+        "● LIVE — " +
+        subject +
+        " — অধ্যায় " +
+        chapter;
+
+
+      document
+        .getElementById("liveStatus")
+        .classList.add("live");
+
+
+      document.getElementById("startButton").disabled =
+        true;
+
+
+      document.getElementById("stopButton").disabled =
+        false;
+
+
+      document.getElementById("subject").disabled =
+        true;
+
+
+      document.getElementById("chapter").disabled =
+        true;
+
+
+      document.getElementById("message").style.color =
+        "green";
+
+
+      document.getElementById("message").innerText =
+        "Live Class চালু হয়েছে।";
+
+    }
+
+
+    // ==============================
+    // STOP LIVE
+    // ==============================
+
+    function stopLive() {
+
+      document.getElementById("liveStatus").innerText =
+        "● Live Class বন্ধ";
+
+
+      document
+        .getElementById("liveStatus")
+        .classList.remove("live");
+
+
+      document.getElementById("startButton").disabled =
+        false;
+
+
+      document.getElementById("stopButton").disabled =
+        true;
+
+
+      document.getElementById("subject").disabled =
+        false;
+
+
+      document.getElementById("chapter").disabled =
+        false;
+
+
+      document.getElementById("message").style.color =
+        "#555";
+
+
+      document.getElementById("message").innerText =
+        "Live Class বন্ধ হয়েছে।";
+
+    }
+
+
+    // ==============================
+    // LOGOUT
+    // ==============================
+
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "teacher-login.html";
+
+    }
+
+
+    // ==============================
+    // START PAGE
+    // ==============================
+
+    loadTeacher();
+
+  </script>
+
+</body>
+</html>
