@@ -77,6 +77,28 @@
       color: #555;
     }
 
+    /* ACCESS STATUS */
+
+    .access-box {
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+
+    .access-on {
+      background: #e8f5e9;
+      color: #1b5e20;
+      border: 1px solid #81c784;
+    }
+
+    .access-off {
+      background: #ffebee;
+      color: #b71c1c;
+      border: 1px solid #ef9a9a;
+    }
+
     .subjects-title {
       margin-bottom: 15px;
       color: #1565c0;
@@ -116,6 +138,27 @@
       font-size: 14px;
     }
 
+    /* DISABLED SUBJECT */
+
+    .subject-card.disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .subject-card.disabled:hover {
+      transform: none;
+    }
+
+    .subject-card.disabled h3 {
+      color: #777;
+    }
+
+    .lock-text {
+      color: #c62828 !important;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
     .actions {
       margin-top: 30px;
       display: flex;
@@ -145,6 +188,7 @@
     #message {
       margin-top: 20px;
       color: #555;
+      font-weight: bold;
     }
 
   </style>
@@ -188,6 +232,16 @@
   </div>
 
 
+  <!-- CLASS ACCESS STATUS -->
+
+  <div
+    id="accessBox"
+    class="access-box"
+  >
+    Checking Class Access...
+  </div>
+
+
   <h2 class="subjects-title">
     My Subjects
   </h2>
@@ -196,7 +250,10 @@
   <div class="subjects">
 
 
+    <!-- BANGLA -->
+
     <div
+      id="subject-Bangla"
       class="subject-card"
       onclick="openSubject('Bangla')"
     >
@@ -210,7 +267,10 @@
     </div>
 
 
+    <!-- ENGLISH -->
+
     <div
+      id="subject-English"
       class="subject-card"
       onclick="openSubject('English')"
     >
@@ -224,7 +284,10 @@
     </div>
 
 
+    <!-- MATHEMATICS -->
+
     <div
+      id="subject-Mathematics"
       class="subject-card"
       onclick="openSubject('Mathematics')"
     >
@@ -238,7 +301,10 @@
     </div>
 
 
+    <!-- SCIENCE -->
+
     <div
+      id="subject-Science"
       class="subject-card"
       onclick="openSubject('Science')"
     >
@@ -252,7 +318,10 @@
     </div>
 
 
+    <!-- BGS -->
+
     <div
+      id="subject-BGS"
       class="subject-card"
       onclick="openSubject('BGS')"
     >
@@ -266,7 +335,10 @@
     </div>
 
 
+    <!-- ICT -->
+
     <div
+      id="subject-ICT"
       class="subject-card"
       onclick="openSubject('ICT')"
     >
@@ -315,14 +387,25 @@
 const SUPABASE_URL =
   "https://yzgydftfucahiorefgoc.supabase.co";
 
+
 const SUPABASE_KEY =
   "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
 
 const supabaseClient =
   supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
+
+
+/*
+=========================================
+CLASS ACCESS VARIABLE
+=========================================
+*/
+
+let classAccess = false;
 
 
 /*
@@ -371,6 +454,8 @@ async function loadStudent() {
 
 
     if (error || !profile) {
+
+      console.error(error);
 
       await supabaseClient.auth.signOut();
 
@@ -424,6 +509,19 @@ async function loadStudent() {
 
     /*
     =====================================
+    CHECK CLASS ACCESS
+    =====================================
+    */
+
+    classAccess =
+      profile.class_access === true;
+
+
+    updateAccessDisplay();
+
+
+    /*
+    =====================================
     STUDENT INFORMATION
     =====================================
     */
@@ -458,7 +556,8 @@ async function loadStudent() {
     document.getElementById(
       "studentInfo"
     ).textContent =
-      "Email: " + (profile.email || user.email || "");
+      "Email: " +
+      (profile.email || user.email || "");
 
 
     document.getElementById(
@@ -515,11 +614,89 @@ async function loadStudent() {
 
 /*
 =========================================
+UPDATE ACCESS DISPLAY
+=========================================
+*/
+
+function updateAccessDisplay() {
+
+  const accessBox =
+    document.getElementById("accessBox");
+
+
+  const subjectCards =
+    document.querySelectorAll(".subject-card");
+
+
+  if (classAccess === true) {
+
+    accessBox.className =
+      "access-box access-on";
+
+
+    accessBox.innerHTML =
+      "✓ Class Access: ON<br>" +
+      "আপনার সব Subject-এর Class Access চালু আছে।";
+
+
+    subjectCards.forEach(card => {
+
+      card.classList.remove("disabled");
+
+    });
+
+  }
+
+  else {
+
+    accessBox.className =
+      "access-box access-off";
+
+
+    accessBox.innerHTML =
+      "🔒 Class Access: OFF<br>" +
+      "Owner এখনো আপনার Class Access চালু করেননি। " +
+      "Access চালু হলে আপনি সব Subject-এর ক্লাস ব্যবহার করতে পারবেন।";
+
+
+    subjectCards.forEach(card => {
+
+      card.classList.add("disabled");
+
+    });
+
+  }
+
+}
+
+
+/*
+=========================================
 OPEN SUBJECT
 =========================================
 */
 
 function openSubject(subject) {
+
+  /*
+  CLASS ACCESS CHECK
+  */
+
+  if (classAccess !== true) {
+
+    document.getElementById(
+      "message"
+    ).textContent =
+      "🔒 Class Access বন্ধ আছে। Owner-এর কাছ থেকে Class Access নিতে হবে।";
+
+    return;
+
+  }
+
+
+  /*
+  MATHEMATICS
+  */
 
   if (subject === "Mathematics") {
 
@@ -530,6 +707,10 @@ function openSubject(subject) {
 
   }
 
+
+  /*
+  OTHER SUBJECTS
+  */
 
   document.getElementById(
     "message"
@@ -585,4 +766,4 @@ loadStudent();
 
 </body>
 
-</html>
+  </html>
