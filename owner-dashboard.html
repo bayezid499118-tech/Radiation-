@@ -143,7 +143,6 @@
     <p>Complete Control Center</p>
   </header>
 
-
   <div class="container">
 
     <div class="welcome">
@@ -154,21 +153,16 @@
       </p>
     </div>
 
-
     <h2 class="section-title">
       Owner Controls
     </h2>
-
 
     <div class="cards">
 
       <!-- STUDENTS -->
       <div class="card">
-
         <div class="icon">👨‍🎓</div>
-
         <h3>Students</h3>
-
         <p>
           Student account এবং শিক্ষার্থীদের
           পরিচালনা করুন।
@@ -177,17 +171,13 @@
         <button class="btn" onclick="studentsControl()">
           Manage Students
         </button>
-
       </div>
 
 
       <!-- TEACHERS -->
       <div class="card">
-
         <div class="icon">👨‍🏫</div>
-
         <h3>Teachers</h3>
-
         <p>
           Teacher account এবং শিক্ষক অনুমোদন
           পরিচালনা করুন।
@@ -196,17 +186,13 @@
         <button class="btn" onclick="teachersControl()">
           Manage Teachers
         </button>
-
       </div>
 
 
       <!-- COURSES -->
       <div class="card">
-
         <div class="icon">📚</div>
-
         <h3>Courses</h3>
-
         <p>
           Class, Subject এবং Course
           পরিচালনা করুন।
@@ -215,17 +201,13 @@
         <button class="btn" onclick="coursesControl()">
           Manage Courses
         </button>
-
       </div>
 
 
       <!-- LIVE CLASS -->
       <div class="card">
-
         <div class="icon">🎥</div>
-
         <h3>Live Classes</h3>
-
         <p>
           Live Class এবং Live Session
           পরিচালনা করুন।
@@ -234,17 +216,13 @@
         <button class="btn" onclick="liveControl()">
           Manage Live
         </button>
-
       </div>
 
 
       <!-- RECORDED -->
       <div class="card">
-
         <div class="icon">▶️</div>
-
         <h3>Recorded Classes</h3>
-
         <p>
           Recorded Class এবং ভিডিও
           পরিচালনা করুন।
@@ -253,17 +231,13 @@
         <button class="btn" onclick="recordedControl()">
           Manage Recordings
         </button>
-
       </div>
 
 
       <!-- PDF -->
       <div class="card">
-
         <div class="icon">📄</div>
-
         <h3>Class Slides</h3>
-
         <p>
           Class Slides এবং PDF
           পরিচালনা করুন।
@@ -272,17 +246,13 @@
         <button class="btn" onclick="pdfControl()">
           Manage Slides
         </button>
-
       </div>
 
 
       <!-- EXAM -->
       <div class="card">
-
         <div class="icon">📝</div>
-
         <h3>Online Exams</h3>
-
         <p>
           Online Exam এবং পরীক্ষার
           ফলাফল পরিচালনা করুন।
@@ -291,17 +261,13 @@
         <button class="btn" onclick="examControl()">
           Manage Exams
         </button>
-
       </div>
 
 
       <!-- PROGRESS -->
       <div class="card">
-
         <div class="icon">📊</div>
-
         <h3>Student Progress</h3>
-
         <p>
           শিক্ষার্থীদের অগ্রগতি এবং
           ফলাফল দেখুন।
@@ -310,26 +276,23 @@
         <button class="btn" onclick="progressControl()">
           View Progress
         </button>
-
       </div>
 
 
-      <!-- ACCESS -->
+      <!-- ACCESS CONTROL -->
       <div class="card">
-
         <div class="icon">🔐</div>
 
         <h3>Access Control</h3>
 
         <p>
-          কে কোন Course বা Content
-          ব্যবহার করতে পারবে তা নিয়ন্ত্রণ করুন।
+          Student-এর Class Access
+          ON/OFF করুন।
         </p>
 
         <button class="btn" onclick="accessControl()">
           Manage Access
         </button>
-
       </div>
 
     </div>
@@ -382,7 +345,6 @@
       error
     } = await supabaseClient.auth.getUser();
 
-
     if (error || !user) {
 
       window.location.href =
@@ -391,10 +353,8 @@
       return;
     }
 
-
     const role =
       user.user_metadata?.role;
-
 
     if (role !== "owner") {
 
@@ -405,7 +365,6 @@
 
       return;
     }
-
   }
 
 
@@ -414,12 +373,14 @@
   ========================= */
 
   function studentsControl() {
-    window.location.href = "student-management.html";
+    window.location.href =
+      "student-management.html";
   }
 
 
   function teachersControl() {
-    window.location.href = "teacher-management.html";
+    window.location.href =
+      "teacher-management.html";
   }
 
 
@@ -453,8 +414,15 @@
   }
 
 
+  /* =========================
+     ACCESS CONTROL
+  ========================= */
+
   function accessControl() {
-    alert("Access Control পরবর্তী ধাপে তৈরি হবে।");
+
+    window.location.href =
+      "access-control.html";
+
   }
 
 
