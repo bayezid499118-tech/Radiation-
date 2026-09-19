@@ -153,12 +153,6 @@
       color: #777;
     }
 
-    .lock-text {
-      color: #c62828 !important;
-      font-weight: bold;
-      margin-top: 8px;
-    }
-
     .actions {
       margin-top: 30px;
       display: flex;
@@ -215,6 +209,8 @@
 <div class="container">
 
 
+  <!-- STUDENT INFORMATION -->
+
   <div class="welcome">
 
     <h2 id="welcomeText">
@@ -232,7 +228,7 @@
   </div>
 
 
-  <!-- CLASS ACCESS STATUS -->
+  <!-- CLASS ACCESS -->
 
   <div
     id="accessBox"
@@ -241,6 +237,8 @@
     Checking Class Access...
   </div>
 
+
+  <!-- SUBJECTS -->
 
   <h2 class="subjects-title">
     My Subjects
@@ -258,7 +256,7 @@
       onclick="openSubject('Bangla')"
     >
 
-      <h3>Bangla</h3>
+      <h3>বাংলা</h3>
 
       <p>
         Notes, lessons and resources
@@ -309,7 +307,7 @@
       onclick="openSubject('Science')"
     >
 
-      <h3>Science</h3>
+      <h3>বিজ্ঞান</h3>
 
       <p>
         Notes, lessons and resources
@@ -326,7 +324,7 @@
       onclick="openSubject('BGS')"
     >
 
-      <h3>BGS</h3>
+      <h3>বাংলাদেশ ও বিশ্বপরিচয়</h3>
 
       <p>
         Notes, lessons and resources
@@ -352,8 +350,44 @@
     </div>
 
 
+    <!-- RELIGION -->
+
+    <div
+      id="subject-Religion"
+      class="subject-card"
+      onclick="openSubject('Religion')"
+    >
+
+      <h3>ধর্ম ও নৈতিক শিক্ষা</h3>
+
+      <p>
+        Notes, lessons and resources
+      </p>
+
+    </div>
+
+
+    <!-- PHYSICAL EDUCATION -->
+
+    <div
+      id="subject-Physical"
+      class="subject-card"
+      onclick="openSubject('Physical')"
+    >
+
+      <h3>শারীরিক শিক্ষা ও স্বাস্থ্য</h3>
+
+      <p>
+        Notes, lessons and resources
+      </p>
+
+    </div>
+
+
   </div>
 
+
+  <!-- ACTION BUTTONS -->
 
   <div class="actions">
 
@@ -384,6 +418,12 @@
 <script>
 
 
+/*
+=========================================
+SUPABASE
+=========================================
+*/
+
 const SUPABASE_URL =
   "https://yzgydftfucahiorefgoc.supabase.co";
 
@@ -401,7 +441,7 @@ const supabaseClient =
 
 /*
 =========================================
-CLASS ACCESS VARIABLE
+CLASS ACCESS
 =========================================
 */
 
@@ -678,6 +718,7 @@ OPEN SUBJECT
 
 function openSubject(subject) {
 
+
   /*
   CLASS ACCESS CHECK
   */
@@ -702,6 +743,20 @@ function openSubject(subject) {
 
     window.location.href =
       "mathematics.html";
+
+    return;
+
+  }
+
+
+  /*
+  SCIENCE
+  */
+
+  if (subject === "Science") {
+
+    window.location.href =
+      "science.html";
 
     return;
 
