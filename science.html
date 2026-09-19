@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Science - Radiation</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .header {
+      background: #111827;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 11px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+
+    .back-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .title h2 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    .title p {
+      color: #666;
+      margin-top: 8px;
+    }
+
+    .chapter-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .chapter-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #e5e7eb;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .chapter-number {
+      color: #2563eb;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .chapter-name {
+      font-size: 19px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .chapter-card::after {
+      content: "→";
+      float: right;
+      font-size: 22px;
+      color: #2563eb;
+      margin-top: -28px;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 22px;
+      }
+
+      .title h2 {
+        font-size: 22px;
+      }
+
+      .chapter-name {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>Radiation</h1>
+    <p>Science</p>
+  </div>
+
+  <div class="container">
+
+    <a href="student-dashboard.html" class="back-btn">
+      ← Back to Dashboard
+    </a>
+
+    <div class="title">
+      <h2>বিজ্ঞান</h2>
+      <p>অধ্যায় নির্বাচন করুন</p>
+    </div>
+
+    <div class="chapter-list">
+
+      <!-- Chapter 1 -->
+      <div class="chapter-card" onclick="openChapter(1)">
+        <div class="chapter-number">অধ্যায় ১</div>
+        <div class="chapter-name">প্রাণিজগতের শ্রেণিবিন্যাস</div>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div class="chapter-card" onclick="openChapter(2)">
+        <div class="chapter-number">অধ্যায় ২</div>
+        <div class="chapter-name">জীবের বৃদ্ধি ও বংশগতি</div>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="chapter-card" onclick="openChapter(3)">
+        <div class="chapter-number">অধ্যায় ৩</div>
+        <div class="chapter-name">ব্যাপন, অভিস্রবণ ও প্রস্বেদন</div>
+      </div>
+
+      <!-- Chapter 4 -->
+      <div class="chapter-card" onclick="openChapter(4)">
+        <div class="chapter-number">অধ্যায় ৪</div>
+        <div class="chapter-name">উদ্ভিদের বংশ বৃদ্ধি</div>
+      </div>
+
+      <!-- Chapter 5 -->
+      <div class="chapter-card" onclick="openChapter(5)">
+        <div class="chapter-number">অধ্যায় ৫</div>
+        <div class="chapter-name">সমন্বয় ও নিঃসরণ</div>
+      </div>
+
+      <!-- Chapter 6 -->
+      <div class="chapter-card" onclick="openChapter(6)">
+        <div class="chapter-number">অধ্যায় ৬</div>
+        <div class="chapter-name">পরমাণুর গঠন</div>
+      </div>
+
+      <!-- Chapter 7 -->
+      <div class="chapter-card" onclick="openChapter(7)">
+        <div class="chapter-number">অধ্যায় ৭</div>
+        <div class="chapter-name">পৃথিবী ও মহাকর্ষ</div>
+      </div>
+
+      <!-- Chapter 8 -->
+      <div class="chapter-card" onclick="openChapter(8)">
+        <div class="chapter-number">অধ্যায় ৮</div>
+        <div class="chapter-name">রাসায়নিক বিক্রিয়া</div>
+      </div>
+
+      <!-- Chapter 9 -->
+      <div class="chapter-card" onclick="openChapter(9)">
+        <div class="chapter-number">অধ্যায় ৯</div>
+        <div class="chapter-name">বর্তনী ও তড়িৎপ্রবাহ</div>
+      </div>
+
+      <!-- Chapter 10 -->
+      <div class="chapter-card" onclick="openChapter(10)">
+        <div class="chapter-number">অধ্যায় ১০</div>
+        <div class="chapter-name">অম্ল, ক্ষারক ও লবণ</div>
+      </div>
+
+      <!-- Chapter 11 -->
+      <div class="chapter-card" onclick="openChapter(11)">
+        <div class="chapter-number">অধ্যায় ১১</div>
+        <div class="chapter-name">আলো</div>
+      </div>
+
+      <!-- Chapter 12 -->
+      <div class="chapter-card" onclick="openChapter(12)">
+        <div class="chapter-number">অধ্যায় ১২</div>
+        <div class="chapter-name">মহাকাশ ও উপগ্রহ</div>
+      </div>
+
+      <!-- Chapter 13 -->
+      <div class="chapter-card" onclick="openChapter(13)">
+        <div class="chapter-number">অধ্যায় ১৩</div>
+        <div class="chapter-name">খাদ্য ও পুষ্টি</div>
+      </div>
+
+      <!-- Chapter 14 -->
+      <div class="chapter-card" onclick="openChapter(14)">
+        <div class="chapter-number">অধ্যায় ১৪</div>
+        <div class="chapter-name">পরিবেশ এবং বাস্তুতন্ত্র</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    function openChapter(chapterNumber) {
+
+      window.location.href =
+        "chapter.html?subject=Science&chapter=" + chapterNumber;
+
+    }
+
+  </script>
+
+</body>
+  </html>
