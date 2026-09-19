@@ -150,67 +150,56 @@
 
     <div class="chapter-list">
 
-      <!-- Chapter 1 -->
       <div class="chapter-card" onclick="openChapter(1)">
         <div class="chapter-number">অধ্যায় ১</div>
         <div class="chapter-name">প্যাটার্ন</div>
       </div>
 
-      <!-- Chapter 2 -->
       <div class="chapter-card" onclick="openChapter(2)">
         <div class="chapter-number">অধ্যায় ২</div>
         <div class="chapter-name">মুনাফা</div>
       </div>
 
-      <!-- Chapter 3 -->
       <div class="chapter-card" onclick="openChapter(3)">
         <div class="chapter-number">অধ্যায় ৩</div>
         <div class="chapter-name">পরিমাপ</div>
       </div>
 
-      <!-- Chapter 4 -->
       <div class="chapter-card" onclick="openChapter(4)">
         <div class="chapter-number">অধ্যায় ৪</div>
         <div class="chapter-name">বীজগণিতীয় সূত্রাবলি ও প্রয়োগ</div>
       </div>
 
-      <!-- Chapter 5 -->
       <div class="chapter-card" onclick="openChapter(5)">
         <div class="chapter-number">অধ্যায় ৫</div>
         <div class="chapter-name">বীজগণিতীয় ভগ্নাংশ</div>
       </div>
 
-      <!-- Chapter 6 -->
       <div class="chapter-card" onclick="openChapter(6)">
         <div class="chapter-number">অধ্যায় ৬</div>
         <div class="chapter-name">সরল সহসমীকরণ</div>
       </div>
 
-      <!-- Chapter 7 -->
       <div class="chapter-card" onclick="openChapter(7)">
         <div class="chapter-number">অধ্যায় ৭</div>
         <div class="chapter-name">সেট</div>
       </div>
 
-      <!-- Chapter 8 -->
       <div class="chapter-card" onclick="openChapter(8)">
         <div class="chapter-number">অধ্যায় ৮</div>
         <div class="chapter-name">চতুর্ভুজ</div>
       </div>
 
-      <!-- Chapter 9 -->
       <div class="chapter-card" onclick="openChapter(9)">
         <div class="chapter-number">অধ্যায় ৯</div>
         <div class="chapter-name">পিথাগোরাসের উপপাদ্য</div>
       </div>
 
-      <!-- Chapter 10 -->
       <div class="chapter-card" onclick="openChapter(10)">
         <div class="chapter-number">অধ্যায় ১০</div>
         <div class="chapter-name">বৃত্ত</div>
       </div>
 
-      <!-- Chapter 11 -->
       <div class="chapter-card" onclick="openChapter(11)">
         <div class="chapter-number">অধ্যায় ১১</div>
         <div class="chapter-name">তথ্য ও উপাত্ত</div>
@@ -220,7 +209,80 @@
 
   </div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
+
+    const SUPABASE_URL = "https://yzgydftfucahiorefgoc.supabase.co";
+
+    const SUPABASE_KEY = "sb_publishable_KlqB07d1lFBHtaSf3dhCCg_XczOecCS";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+    // Check Student Class Access
+    async function checkClassAccess() {
+
+      const {
+        data: { user }
+      } = await supabaseClient.auth.getUser();
+
+      // Login করা না থাকলে
+      if (!user) {
+        window.location.href = "student-login.html";
+        return;
+      }
+
+
+      const { data: profile, error } = await supabaseClient
+        .from("profiles")
+        .select("role, is_active, class_access")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+      // Profile সমস্যা হলে
+      if (error || !profile || profile.role !== "student") {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href = "student-login.html";
+
+        return;
+      }
+
+
+      // Account Block করা থাকলে
+      if (profile.is_active === false) {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href = "student-login.html";
+
+        return;
+      }
+
+
+      // Class Access OFF হলে
+      if (profile.class_access !== true) {
+
+        alert("আপনার Class Access এখনো চালু করা হয়নি।");
+
+        window.location.href = "student-dashboard.html";
+
+        return;
+      }
+
+    }
+
+
+    // Page load হলে Access Check
+    checkClassAccess();
+
 
     function openChapter(chapterNumber) {
 
